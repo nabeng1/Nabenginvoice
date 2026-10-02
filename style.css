@@ -772,3 +772,54 @@ body{background:var(--ni-bg);color:var(--ni-text)}
 .ni-mock-top .ni-inline-brand{color:#fff}
 .ni-editor-title .ni-inline-brand strong{color:#fff}
 @media(max-width:600px){.ni-logo > span{font-size:15px}.ni-brand-logo{width:38px;height:38px}.ni-editor-title .ni-inline-brand img{width:27px;height:27px}.ni-form-brand img{width:36px;height:36px}}
+
+
+/* ==========================================================
+   PHASE 1 — PAYMENT TRACKING & INVOICE HISTORY
+   ========================================================== */
+.ni-history-tools{display:grid;grid-template-columns:1fr 190px;gap:10px;margin:16px 0 4px}
+.ni-history-tools input,.ni-history-tools select{width:100%;box-sizing:border-box;border:1px solid #e2e8f0;background:#fff;border-radius:12px;padding:11px 13px;font:inherit;color:#0f172a;outline:none}
+.ni-history-tools input:focus,.ni-history-tools select:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.10)}
+.ni-history-item{display:grid;grid-template-columns:minmax(170px,1.3fr) minmax(130px,.8fr) minmax(140px,.8fr) auto;gap:14px;align-items:center}
+.ni-history-status{display:flex;flex-direction:column;gap:5px}.ni-history-status small,.ni-history-total small{display:block;color:#64748b;font-size:11px;margin-top:4px}
+.ni-status{display:inline-flex;align-items:center;width:max-content;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:800;letter-spacing:.01em}
+.ni-status-unpaid{background:#fff7ed;color:#c2410c}.ni-status-partial{background:#eff6ff;color:#1d4ed8}.ni-status-paid{background:#ecfdf5;color:#047857}.ni-status-overdue{background:#fef2f2;color:#b91c1c}
+.ni-balance-preview{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding:12px 14px;border:1px solid #e2e8f0;background:#f8fafc;border-radius:12px}.ni-balance-preview span{color:#64748b;font-size:12px;font-weight:700}.ni-balance-preview strong{font-size:15px;color:#0f172a}
+@media(max-width:760px){.ni-history-tools{grid-template-columns:1fr}.ni-history-item{grid-template-columns:1fr;gap:9px}.ni-history-actions{justify-content:flex-start}.ni-history-total{padding-top:2px}}
+
+/* =========================================================
+   NABENG INVOICE — PHASE 2 CUSTOMER MANAGEMENT
+   ========================================================= */
+.ni-customers-card{margin-top:16px}.ni-customer-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-top:18px}.ni-customer-notes{grid-column:1/-1}.ni-customer-form textarea{width:100%;box-sizing:border-box;border:1px solid #e2e8f0;border-radius:12px;padding:11px 13px;font:inherit;resize:vertical;outline:none}.ni-customer-form textarea:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.10)}.ni-customer-form-actions{display:flex;gap:9px;margin-top:14px}.ni-customer-search{margin-top:18px}.ni-customer-search input{width:100%;box-sizing:border-box;border:1px solid #e2e8f0;background:#fff;border-radius:12px;padding:11px 13px;font:inherit;color:#0f172a;outline:none}.ni-customer-search input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.10)}.ni-customer-list{display:grid;gap:9px;margin-top:12px}.ni-customer-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 15px;border:1px solid var(--ni-border);border-radius:12px;background:#fff}.ni-customer-row strong{display:block;color:#0f172a;font:800 12px Inter,sans-serif}.ni-customer-row span,.ni-customer-row small{display:block;color:#64748b;font:500 10px/1.5 Inter,sans-serif;margin-top:3px}.ni-customer-actions{display:flex;gap:6px;flex-shrink:0}.ni-customer-row .ni-history-action{font-size:10px}.ni-customer-form .ni-field input,.ni-customer-form .ni-field textarea{background:#fff}.ni-customer-form select{width:100%}
+@media(max-width:700px){.ni-customer-form{grid-template-columns:1fr}.ni-customer-notes{grid-column:auto}.ni-customer-row{align-items:flex-start;flex-direction:column}.ni-customer-actions{width:100%}}
+
+@media(min-width:900px){.ni-actions{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+/* =========================================================
+   NABENG INVOICE — PHASE 3 BUSINESS TOOLS
+========================================================= */
+.ni-analytics-card{margin-bottom:20px}.ni-analytics-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}.ni-metric{padding:18px;border:1px solid #e2e8f0;border-radius:16px;background:#f8fafc}.ni-metric span{display:block;color:#64748b;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}.ni-metric strong{display:block;margin-top:8px;font-size:20px;letter-spacing:-.02em}.ni-analytics-detail{margin-top:16px;border-top:1px solid #e5e7eb;padding-top:12px;display:grid;gap:7px}.ni-analytics-detail>div{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:10px;background:#f8fafc}.ni-analytics-detail span{color:#64748b}.ni-analytics-detail strong{color:#0f172a}
+.ni-editor-bottom-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:4px}.ni-secondary-btn{border:1px solid #cbd5e1;background:#fff;color:#0f172a;border-radius:10px;padding:12px 15px;font-weight:800;cursor:pointer;transition:.2s}.ni-secondary-btn:hover{border-color:#93c5fd;background:#eff6ff;color:#1d4ed8}.ni-preview-summary{margin:16px 0 0 auto;max-width:280px;border-top:1px solid #e5e7eb;padding-top:10px;display:grid;gap:6px}.ni-preview-summary>div{display:flex;justify-content:space-between;gap:18px;font-size:12px}.ni-preview-summary span{color:#64748b}.ni-preview-summary strong{color:#0f172a}
+.ni-modal{position:fixed;inset:0;z-index:100;background:rgba(15,23,42,.55);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;padding:18px}.ni-modal-card{width:min(620px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:22px;box-shadow:0 28px 80px rgba(15,23,42,.25);padding:24px}.ni-modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:18px}.ni-modal-head h3{margin:0;font-size:20px}.ni-modal-head p{margin:5px 0 0;color:#64748b;font-size:13px}.ni-modal-close{border:0;background:#f1f5f9;border-radius:10px;width:36px;height:36px;font-size:22px;line-height:1;cursor:pointer;color:#475569}.ni-modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.ni-modal-full{grid-column:1/-1}.ni-modal-grid input,.ni-modal-grid select,.ni-modal-grid textarea{width:100%;box-sizing:border-box;border:1px solid #dbe2ea;background:#fff;border-radius:12px;padding:11px 13px;font:inherit;outline:none}.ni-modal-grid input:focus,.ni-modal-grid select:focus,.ni-modal-grid textarea:focus{border-color:#60a5fa;box-shadow:0 0 0 3px rgba(59,130,246,.1)}.ni-modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:20px}.ni-receipt-modal{width:min(700px,100%)}.ni-receipt{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:28px;max-width:560px;margin:0 auto}.ni-receipt-brand{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;border-bottom:2px solid #0f172a;padding-bottom:18px}.ni-receipt-brand strong{font-size:21px;letter-spacing:-.03em}.ni-receipt-brand span{font-size:11px;font-weight:900;letter-spacing:.12em;color:#2563eb}.ni-receipt-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}.ni-receipt-meta small{display:block;color:#64748b;font-size:10px;text-transform:uppercase;letter-spacing:.06em}.ni-receipt-meta strong{display:block;margin-top:5px;font-size:12px}.ni-receipt-amount{padding:20px;border-radius:14px;background:#eff6ff;display:flex;justify-content:space-between;align-items:center;gap:15px}.ni-receipt-amount span{font-weight:700;color:#475569}.ni-receipt-amount strong{font-size:22px;color:#1d4ed8}.ni-receipt-lines{margin-top:18px;border-top:1px solid #e2e8f0}.ni-receipt-lines>div{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #eef2f7;font-size:13px}.ni-receipt-lines span{color:#64748b}.ni-receipt-note{text-align:center;color:#64748b;font-size:12px;margin:22px 0 0}
+@media(max-width:760px){.ni-analytics-grid{grid-template-columns:1fr 1fr}.ni-modal-grid{grid-template-columns:1fr}.ni-modal-full{grid-column:auto}.ni-receipt-meta{grid-template-columns:1fr}.ni-receipt-amount{align-items:flex-start;flex-direction:column}}
+@media(max-width:500px){.ni-analytics-grid{grid-template-columns:1fr}.ni-editor-bottom-actions>*{flex:1}.ni-receipt{padding:18px}}
+
+/* =========================================================
+   NABENG INVOICE — PHASE 4 BUSINESS OPERATIONS
+========================================================= */
+.ni-phase4-card{margin-top:16px}
+.ni-phase4-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-top:18px}
+.ni-phase4-full{grid-column:1/-1}
+.ni-phase4-form textarea{width:100%;box-sizing:border-box;border:1px solid #e2e8f0;border-radius:12px;padding:11px 13px;font:inherit;resize:vertical;outline:none}
+.ni-phase4-form textarea:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.10)}
+.ni-phase4-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
+.ni-phase4-list{display:grid;gap:9px;margin-top:18px}
+.ni-phase4-row{display:grid;grid-template-columns:minmax(190px,1.4fr) minmax(130px,.8fr) auto auto;gap:14px;align-items:center;padding:14px 15px;border:1px solid var(--ni-border);border-radius:13px;background:#fff}
+.ni-phase4-row strong{display:block;color:#0f172a;font-size:12px}
+.ni-phase4-row span,.ni-phase4-row small{display:block;color:#64748b;font-size:10px;margin-top:4px}
+.ni-report-filters{display:grid;grid-template-columns:1fr 1fr auto;gap:12px;align-items:end;margin-top:18px}
+.ni-report-breakdown{margin-top:18px;border-top:1px solid #e2e8f0;padding-top:12px;display:grid;gap:7px}
+.ni-report-breakdown>div{display:flex;justify-content:space-between;padding:10px 12px;border-radius:10px;background:#f8fafc}
+.ni-report-breakdown span{color:#64748b}.ni-report-breakdown strong{color:#0f172a}
+@media(max-width:900px){.ni-phase4-row{grid-template-columns:1fr 1fr}.ni-phase4-row .ni-customer-actions{grid-column:1/-1}.ni-report-filters{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){.ni-phase4-form{grid-template-columns:1fr}.ni-phase4-full{grid-column:auto}.ni-phase4-row{grid-template-columns:1fr}.ni-report-filters{grid-template-columns:1fr}.ni-phase4-actions>*{flex:1}}
