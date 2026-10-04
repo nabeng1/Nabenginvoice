@@ -22,7 +22,6 @@ let niCurrentInvoice = null;
 let niCustomers = [];
 let niEditingCustomerId = null;
 let niCustomerStats = {};
-let niSubscription = null;
 
 const NABENG_INVOICE_BRAND_LOGO = 'assets/nabeng-invoice-logo.png';
 const $ni = id => document.getElementById(id);
@@ -113,85 +112,6 @@ async function niEnsureProfile(user){
   return created;
 }
 
-async function niGetAccessToken(){
-  if(!niSupabase) return '';
-  const {data}=await niSupabase.auth.getSession();
-  return data?.session?.access_token||'';
-}
-
-function niSubscriptionEndDate(){
-  if(!niSubscription)return null;
-  const value=niSubscription.plan==='trial'?niSubscription.trial_end:niSubscription.subscription_end;
-  return value?new Date(value):null;
-}
-
-function niHasInvoiceAccess(){
-  if(!niSubscription)return false;
-  const end=niSubscriptionEndDate();
-  return niSubscription.status==='active' && end && end.getTime()>Date.now();
-}
-
-function niFormatSubscriptionDate(value){
-  if(!value)return '—';
-  const d=new Date(value); if(Number.isNaN(d.getTime()))return '—';
-  return d.toLocaleDateString(undefined,{day:'2-digit',month:'short',year:'numeric'});
-}
-
-function niUpdateSubscriptionUI(){
-  const row=niSubscription;
-  const title=$ni('subscriptionTitle'),summary=$ni('subscriptionSummary'),badge=$ni('subscriptionBadge'),dates=$ni('subscriptionDates'),days=$ni('subscriptionDays'),bar=$ni('subscriptionProgressBar'),action=$ni('subscriptionActionBtn'),modal=$ni('subscriptionModalContent');
-  if(!title)return;
-  if(!row){title.textContent='Subscription unavailable';summary.textContent='We could not determine your access status.';badge.textContent='ERROR';return;}
-  const end=niSubscriptionEndDate(), active=niHasInvoiceAccess(), isTrial=row.plan==='trial';
-  const dayCount=Math.max(0,Math.ceil((end-Date.now())/86400000));
-  badge.textContent=active?(isTrial?'FREE TRIAL':'ACTIVE'):'EXPIRED';
-  badge.className='ni-subscription-badge '+(active?(isTrial?'trial':'active'):'expired');
-  title.textContent=active?(isTrial?'14-Day Free Trial':`${row.plan==='annual'?'Annual':'Monthly'} Plan`):'Subscription Expired';
-  summary.textContent=active?(isTrial?'Your invoice workspace is fully unlocked during your free trial.':`Your ${row.plan==='annual'?'annual':'monthly'} subscription is active.`):'Invoice creation is locked until you subscribe.';
-  dates.textContent=active?(isTrial?`Trial ends ${niFormatSubscriptionDate(row.trial_end)}`:`Valid until ${niFormatSubscriptionDate(row.subscription_end)}`):'Access has ended';
-  days.textContent=active?`${dayCount} day${dayCount===1?'':'s'} remaining`:'Choose a plan to continue';
-  const total=isTrial?14:(row.plan==='annual'?365:30),used=Math.max(0,total-dayCount); if(bar)bar.style.width=Math.min(100,Math.max(4,(used/total)*100))+'%';
-  if(action)action.textContent=active?(isTrial?'Subscribe Now':'Renew / Extend'):'Choose a Plan';
-  if(modal){modal.innerHTML=`<div class="ni-subscription-status ${active?'is-active':'is-expired'}"><strong>${active?(isTrial?'🔵 FREE TRIAL':'🟢 ACTIVE'):'🔴 SUBSCRIPTION EXPIRED'}</strong><p>${active?(isTrial?`Your free trial expires on ${niFormatSubscriptionDate(row.trial_end)}.`:`Your plan is valid until ${niFormatSubscriptionDate(row.subscription_end)}.`):'Your invoices and account data remain saved, but invoice generation is locked.'}</p><div class="ni-subscription-reference">${row.subscription_reference?`Reference: <strong>${niEscape(row.subscription_reference)}</strong>`:''}</div></div>`;}
-}
-
-async function niLoadSubscription(){
-  const token=await niGetAccessToken(); if(!token)return false;
-  try{
-    const response=await fetch('/api/subscription/status',{headers:{Authorization:`Bearer ${token}`} });
-    const data=await response.json(); if(!response.ok)throw new Error(data.error||'Unable to load subscription.');
-    niSubscription=data.subscription||null; niUpdateSubscriptionUI(); return !!niSubscription;
-  }catch(e){console.error('Subscription status failed:',e);niSubscription=null;niUpdateSubscriptionUI();return false;}
-}
-
-function niOpenSubscriptionModal(){
-  niUpdateSubscriptionUI(); niShow('subscriptionModal');
-}
-function niCloseSubscriptionModal(){niHide('subscriptionModal');}
-
-async function niStartSubscriptionPayment(plan){
-  if(!niSession){niOpenAuth('signin');return;}
-  const token=await niGetAccessToken(); if(!token){alert('Your session has expired. Please sign in again.');return;}
-  const buttons=[...document.querySelectorAll('.ni-plan-btn')];buttons.forEach(b=>b.disabled=true);
-  try{
-    const response=await fetch('/api/payment/initialize',{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${token}`},body:JSON.stringify({plan})});
-    const data=await response.json();if(!response.ok)throw new Error(data.error||'Unable to start payment.');
-    window.location.href=data.authorization_url;
-  }catch(e){alert(e.message||'Unable to start payment.');buttons.forEach(b=>b.disabled=false);}
-}
-
-async function niVerifyReturnedPayment(){
-  const params=new URLSearchParams(window.location.search),reference=params.get('reference'),payment=params.get('payment');
-  if(payment!=='success'||!reference||!niSession)return;
-  const token=await niGetAccessToken(); if(!token)return;
-  try{
-    const response=await fetch('/api/payment/verify',{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${token}`},body:JSON.stringify({reference})});
-    const data=await response.json(); if(!response.ok)throw new Error(data.error||'Payment verification failed.');
-    niSubscription=data.subscription;niUpdateSubscriptionUI();alert(`Payment successful. Your ${data.subscription.plan==='annual'?'annual':'monthly'} Nabeng Invoice subscription is now active.`);
-  }catch(e){alert(`Payment received, but server verification is not complete yet. ${e.message||''}`);await niLoadSubscription();}
-  window.history.replaceState({},document.title,window.location.pathname);
-}
-
 async function niLoadUser(user){
   niSession=user;
   try{ niProfile=await niEnsureProfile(user); }catch(e){ console.error('Profile load failed',e); niProfile={user_id:user.id,full_name:user.user_metadata?.full_name||'',business_name:'',business_email:user.email||'',business_phone:'',business_address:'',logo_url:'',signature_url:''}; }
@@ -213,8 +133,6 @@ async function niLoadUser(user){
   await niLoadCustomers();
   await niLoadInvoiceHistory();
   niOpenDashboard();
-  await niLoadSubscription();
-  await niVerifyReturnedPayment();
 }
 
 async function niStart(){
@@ -357,7 +275,6 @@ function niNewInvoice(){
 
 async function niSaveInvoiceRecord(){
   if(!niSupabase||!niSession)return null;
-  if(!niHasInvoiceAccess()){ await niLoadSubscription(); if(!niHasInvoiceAccess()){ niOpenSubscriptionModal(); throw new Error('Your Nabeng Invoice access has expired. Please subscribe to continue.'); } }
   const cleanItems=items.filter(x=>x.qty||x.desc||x.rate).map(x=>({qty:x.qty||'',desc:x.desc||'',rate:x.rate||''}));
   const pricing=niPricingSummary(cleanItems);
   const total=pricing.total;
@@ -457,7 +374,6 @@ async function niFindOrCreateCustomer(){
 }
 
 function niOpenEditor(){
-  if(!niHasInvoiceAccess()){ niOpenSubscriptionModal(); return; }
   niHide('landingScreen');niHide('authScreen');niHide('dashboardScreen');niShow('invoiceApp');niShow('editorBar');document.body.classList.remove('ni-auth-mode');document.body.classList.add('ni-editor-mode');
   // Load the signed-in business profile into the existing invoice form.
   if(niProfile){
@@ -672,13 +588,6 @@ function niWire(){
   });
 
   onClick('saveProfileBtn',niSaveProfile);
-  onClick('subscriptionBtn',niOpenSubscriptionModal);
-  onClick('subscriptionActionBtn',niOpenSubscriptionModal);
-  onClick('subscriptionRefreshBtn',niLoadSubscription);
-  onClick('closeSubscriptionModal',niCloseSubscriptionModal);
-  document.querySelectorAll('.ni-plan-btn').forEach(btn=>btn.addEventListener('click',()=>niStartSubscriptionPayment(btn.dataset.plan)));
-
-
 
   const logoInput=$ni('profileLogoInput');
   if(logoInput)logoInput.addEventListener('change',e=>{
@@ -867,7 +776,6 @@ function niWire(){
   });
 
   printBtn.addEventListener('click', async () => {
-    if(!niHasInvoiceAccess()){ await niLoadSubscription(); if(!niHasInvoiceAccess()){ niOpenSubscriptionModal(); return; } }
     const button = printBtn;
     const sheet = document.getElementById('sheet');
 
