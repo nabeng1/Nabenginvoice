@@ -53,6 +53,12 @@
 <nav class="ni-dash-nav"><div class="ni-logo"><img class="ni-brand-logo" data-ni-brand-logo src="assets/nabeng-invoice-logo.png" alt="Nabeng Invoice logo"><span>Nabeng Invoice</span></div><div class="ni-user-chip"><span class="ni-avatar" id="dashAvatar">N</span><span id="dashUserName">User</span><button class="ni-btn ni-logout" id="dashLogout">Sign Out</button></div></nav>
 <main class="ni-dash-main">
 <div class="ni-welcome"><div><h1 id="dashGreeting">Welcome back</h1><p>Your invoice workspace is ready.</p></div><button class="ni-btn ni-btn-primary" id="newInvoiceBtn">+ Create New Invoice</button></div>
+<div class="ni-subscription-card" id="subscriptionCard">
+  <div class="ni-subscription-top"><div><span class="ni-subscription-label">ACCOUNT PLAN</span><h2 id="subscriptionTitle">Loading subscription…</h2><p id="subscriptionSummary">Checking your access.</p></div><span class="ni-subscription-badge" id="subscriptionBadge">CHECKING</span></div>
+  <div class="ni-subscription-progress"><div id="subscriptionProgressBar"></div></div>
+  <div class="ni-subscription-meta"><span id="subscriptionDates">—</span><strong id="subscriptionDays">—</strong></div>
+  <div class="ni-subscription-actions"><button class="ni-btn ni-btn-primary" id="subscriptionActionBtn">View Plans</button><button class="ni-small-btn" id="subscriptionRefreshBtn">Refresh</button></div>
+</div>
 <div class="ni-dash-grid"><div class="ni-dash-card"><h3>Business</h3><div class="ni-big" id="dashBusinessName">Not set</div><p id="dashBusinessContact">Add your business profile so invoices can be prepared automatically.</p></div><div class="ni-dash-card"><h3>Account</h3><div class="ni-big" id="dashEmail">—</div><p>Signed-in account</p></div><div class="ni-dash-card"><h3>Invoice workspace</h3><div class="ni-big">Ready</div><p>Your existing invoice editor is protected behind your account.</p></div></div>
 <div class="ni-actions">
 <button class="ni-action" id="editProfileBtn"><strong>Business Profile</strong><span>Save your business details and permanent logo used on invoices.</span></button>
@@ -62,6 +68,7 @@
 <button class="ni-action" id="recurringBtn"><strong>Recurring Invoices</strong><span>Save invoice schedules and generate the next invoice when due.</span></button>
 <button class="ni-action" id="expensesBtn"><strong>Expenses</strong><span>Track business expenses and understand your real profit.</span></button>
 <button class="ni-action" id="reportsBtn"><strong>Business Reports</strong><span>Review revenue, expenses, profit and payment activity by date.</span></button>
+<button class="ni-action" id="subscriptionBtn"><strong>Subscription</strong><span>View your trial, plan, expiry date and renewal options.</span></button>
 </div>
 <div class="ni-dash-card ni-customers-card ni-hidden" id="customerPanel">
   <div class="ni-history-head"><div><h3>Customer Management</h3><p>Keep reusable customer names, contacts and addresses in one place.</p></div><button class="ni-small-btn" id="refreshCustomersBtn">Refresh</button></div>
@@ -147,6 +154,17 @@
 <div class="ni-history-list" id="invoiceHistoryList"><div class="ni-history-empty">Loading invoices...</div></div></div>
 </main>
 </section>
+<div class="ni-modal ni-hidden" id="subscriptionModal">
+  <div class="ni-modal-card ni-subscription-modal-card">
+    <div class="ni-modal-head"><div><h3>My Subscription</h3><p>Keep your Nabeng Invoice workspace active.</p></div><button class="ni-modal-close" id="closeSubscriptionModal">&times;</button></div>
+    <div id="subscriptionModalContent"></div>
+    <div class="ni-plan-grid">
+      <div class="ni-plan-card"><span class="ni-plan-kicker">MONTHLY</span><h4>GH₵30</h4><p>30 days of full access.</p><ul><li>Unlimited invoices</li><li>Customer management</li><li>Digital signatures</li><li>PDF / Print</li></ul><button class="ni-btn ni-btn-primary ni-plan-btn" data-plan="monthly">Subscribe Monthly</button></div>
+      <div class="ni-plan-card featured"><span class="ni-plan-kicker">ANNUAL • SAVE GH₵60</span><h4>GH₵300</h4><p>365 days of full access.</p><ul><li>Everything in Monthly</li><li>One full year</li><li>Priority value</li><li>No monthly renewal</li></ul><button class="ni-btn ni-btn-primary ni-plan-btn" data-plan="annual">Subscribe Annual</button></div>
+    </div>
+    <div class="ni-payment-note">Payments are securely completed on Paystack. Your account is unlocked only after the server verifies the payment amount and status.</div>
+  </div>
+</div>
 <div class="ni-editor-bar ni-hidden" id="editorBar"><div class="ni-editor-title"><span class="ni-inline-brand"><img data-ni-brand-logo src="assets/nabeng-invoice-logo.png" alt="Nabeng Invoice logo"><strong>Nabeng Invoice</strong></span> <span style="color:#94a3b8;font-weight:600">/ Invoice Editor</span></div><div class="ni-editor-actions"><button class="ni-editor-btn" id="backDashboardBtn">← Dashboard</button><button class="ni-editor-btn" id="editorSignOut">Sign Out</button></div></div>
 <div class="app ni-hidden" id="invoiceApp">
 <!-- ============ FORM ============ -->
