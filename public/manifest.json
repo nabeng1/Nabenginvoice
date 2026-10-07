@@ -1,12 +1,1 @@
-{
-  "name": "Nabeng Invoice",
-  "short_name": "Nabeng Invoice",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#f8fafc",
-  "theme_color": "#2563eb",
-  "icons": [
-    {"src":"/assets/nabeng-invoice-logo.png","sizes":"192x192","type":"image/png"},
-    {"src":"/assets/nabeng-invoice-logo.png","sizes":"512x512","type":"image/png"}
-  ]
-}
+{"name":"Nabeng Invoice","short_name":"Nabeng Invoice","start_url":"/","display":"standalone","background_color":"#f1f5f9","theme_color":"#0f172a","icons":[]}

@@ -1,33 +1,28 @@
-# Nabeng Invoice — Production Build
+# Nabeng Invoice — Modular Production Upgrade
 
-This project is configured as a Vite production application so the browser receives a small HTML shell and hashed/minified assets, similar to the Kanella structure.
+This version keeps the uploaded Nabeng Invoice functionality but organizes the JavaScript into feature modules.
 
-## Build
+## Source structure
+- `src/main.js` — application entry point
+- `src/runtime.js` — shared runtime/state/config
+- `src/style.css` — application styles
+- `src/modules/auth.js` — authentication/session
+- `src/modules/profile.js` — business profile/logo/signature
+- `src/modules/invoices.js` — invoice history/editor lifecycle
+- `src/modules/customers.js` — customer management
+- `src/modules/analytics.js` — dashboard analytics
+- `src/modules/payments.js` — payments/receipts/WhatsApp
+- `src/modules/phase4.js` — recurring invoices, expenses, reports
+- `src/modules/editor.js` — invoice editor/PDF rendering
+- `src/modules/utils.js` — shared invoice helpers
+- `src/modules/wire.js` — DOM event wiring
+- `src/components/` — small reusable UI helpers
 
-```bash
-npm install
-npm run build
-```
+## Development
+`npm install` then `npm run dev`
 
-The deployable site is generated in `dist/`.
+## Production
+`npm run build` produces a `dist/` folder with minified, hashed assets and no source maps.
 
-## Production result
-
-The generated HTML references assets similar to:
-
-- `/assets/index-XXXXXXXX.js`
-- `/assets/index-XXXXXXXX.css`
-
-Source maps are disabled in the production build.
-
-## Deployment
-
-For Vercel, use:
-
-- Build command: `npm run build`
-- Output directory: `dist`
-- Install command: `npm install`
-
-## Important security note
-
-Frontend JavaScript can never be completely hidden from a browser. Bundling/minification makes casual copying substantially harder, but Supabase Row Level Security must remain the real authorization boundary. Never put a Supabase `service_role` key in frontend code.
+## Important
+The Supabase anon key is a public browser key; never replace it with a service-role key. Supabase RLS must enforce data ownership.

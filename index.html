@@ -6,7 +6,8 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Nabeng Invoice — Professional Invoice Generator</title>
 <link rel="icon" type="image/png" href="/assets/nabeng-invoice-logo.png">
-  <script type="module" src="/src/main.js"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&amp;family=Georgia&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
 </head>
 <body class="ni-auth-mode">
 <!-- ============ NABENG INVOICE PLATFORM ============ -->
@@ -366,6 +367,7 @@
 
 <div class="ni-modal ni-hidden" id="paymentModal"><div class="ni-modal-card"><div class="ni-modal-head"><div><h3>Record Payment</h3><p id="paymentModalInvoice">Invoice payment</p></div><button class="ni-modal-close" id="closePaymentModal">&times;</button></div><div class="ni-modal-grid"><div class="ni-field"><label>Amount</label><input id="recordPaymentAmount" type="number" min="0.01" step="0.01"></div><div class="ni-field"><label>Payment date</label><input id="recordPaymentDate" type="date"></div><div class="ni-field"><label>Payment method</label><select id="recordPaymentMethod"><option>Cash</option><option>Mobile Money</option><option>Bank Transfer</option><option>Card</option><option>Other</option></select></div><div class="ni-field"><label>Reference</label><input id="recordPaymentReference" placeholder="Transaction / receipt reference"></div><div class="ni-field ni-modal-full"><label>Notes</label><textarea id="recordPaymentNotes" rows="3" placeholder="Optional payment notes"></textarea></div></div><div class="ni-modal-actions"><button class="ni-small-btn" id="cancelPaymentBtn">Cancel</button><button class="ni-btn ni-btn-primary" id="savePaymentBtn">Save Payment</button></div></div></div>
 <div class="ni-modal ni-hidden" id="receiptModal"><div class="ni-modal-card ni-receipt-modal"><div class="ni-modal-head"><div><h3>Payment Receipt</h3><p>Ready to download or share.</p></div><button class="ni-modal-close" id="closeReceiptModal">&times;</button></div><div id="receiptContent"></div><div class="ni-modal-actions"><button class="ni-small-btn" id="closeReceiptBtn">Close</button><button class="ni-btn ni-btn-primary" id="downloadReceiptBtn">Download Receipt PDF</button></div></div></div>
-
+<!-- Phase 4 adds recurring invoices, expenses and business reporting. -->
+<script type="module" src="/src/main.js"></script>
 </body>
 </html>
