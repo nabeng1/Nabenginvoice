@@ -1,7 +1,10 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-    base: '/nabeng-invoice/',
+    base: '/',
+    build: {
+        sourcemap: false
+    }
     build: {
         sourcemap: false,
         rollupOptions: {
