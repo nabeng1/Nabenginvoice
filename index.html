@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Nabeng Invoice — Professional Invoice Generator</title>
+<link rel="icon" type="image/png" href="/assets/nabeng-invoice-logo.png">
+  <script type="module" src="/src/main.js"></script>
+</head>
+<body class="ni-auth-mode">
+<!-- ============ NABENG INVOICE PLATFORM ============ -->
+<section class="ni-screen ni-landing" id="landingScreen">
+<nav class="ni-nav">
+<div class="ni-logo"><img class="ni-brand-logo" data-ni-brand-logo src="/assets/nabeng-invoice-logo.png" alt="Nabeng Invoice logo"><span>Nabeng Invoice</span></div>
+<div class="ni-nav-actions"><button class="ni-btn ni-btn-outline" id="landingSignIn">Sign In</button><button class="ni-btn ni-btn-primary" id="landingSignUp">Create Account</button></div>
+</nav>
+<div class="ni-hero">
+<div>
+<span class="ni-kicker">Simple • Professional • Cloud-based</span>
+<h1>Create invoices that look <span>professional.</span></h1>
+<p>Nabeng Invoice helps businesses create polished invoices, save their business information, add digital signatures, and download ready-to-send PDF invoices from anywhere.</p>
+<div class="ni-hero-actions"><button class="ni-btn ni-btn-primary" id="heroGetStarted">Get Started Free</button><button class="ni-btn ni-btn-outline" id="heroSignIn">I already have an account</button></div>
+<div class="ni-features"><div class="ni-feature"><strong>☁️ Your profile follows you</strong><span>Business information is saved to Supabase and loaded after sign-in.</span></div><div class="ni-feature"><strong>📄 Professional PDFs</strong><span>Download the same invoice design you see in the preview.</span></div><div class="ni-feature"><strong>✍️ Digital signatures</strong><span>Add a manager signature to your invoice.</span></div><div class="ni-feature"><strong>⚡ Fast invoice creation</strong><span>Enter client and item details and generate your invoice.</span></div></div>
+</div>
+<div class="ni-mock"><div class="ni-mock-top"><span class="ni-inline-brand"><img data-ni-brand-logo src="/assets/nabeng-invoice-logo.png" alt="Nabeng Invoice logo"><strong>Nabeng Invoice</strong></span><span style="margin-left:auto;font-size:10px;color:#94a3b8">PREVIEW</span></div><div class="ni-mock-sheet"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px"><div><div style="font-weight:900;font-size:18px">Your Business</div><div style="font-size:10px;color:#64748b">Professional invoice</div></div><div style="width:45px;height:45px;border-radius:10px;background:#eff6ff"></div></div><div class="ni-mock-band">INVOICE</div><div class="ni-lines"><div class="ni-line"></div><div class="ni-line mid"></div><div class="ni-line short"></div><div class="ni-line"></div><div class="ni-line mid"></div></div><div style="display:flex;justify-content:flex-end;margin-top:25px"><div style="width:150px;height:38px;border-radius:8px;background:#eff6ff"></div></div></div></div>
+</div>
+</section>
+<section class="ni-screen ni-hidden" id="authScreen">
+<div class="ni-auth-wrap">
+<div class="ni-auth-side"><div class="ni-logo"><img class="ni-brand-logo" data-ni-brand-logo src="/assets/nabeng-invoice-logo.png" alt="Nabeng Invoice logo"><span>Nabeng Invoice</span></div><h2>Your invoices. Your business. Your workspace.</h2><p>Sign in to access your saved business information and create invoices without entering the same details every time.</p></div>
+<div class="ni-auth-card-wrap"><div class="ni-auth-card">
+<h3 id="authTitle">Welcome to Nabeng Invoice</h3><p class="sub" id="authSubtitle">Create an account or sign in to continue.</p>
+<div class="ni-auth-tabs"><button class="ni-auth-tab active" id="tabSignIn">Sign In</button><button class="ni-auth-tab" id="tabSignUp">Sign Up</button></div>
+<form id="authForm">
+<div class="ni-field ni-signup-only ni-hidden"><label>Full name</label><input autocomplete="name" id="authName" placeholder="Your full name" type="text"/></div>
+<div class="ni-field"><label>Email address</label><input autocomplete="email" id="authEmail" placeholder="you@example.com" required="" type="email"/></div>
+<div class="ni-field"><label>Password</label><input autocomplete="current-password" id="authPassword" minlength="6" placeholder="••••••••" required="" type="password"/></div>
+<button class="ni-btn ni-btn-primary ni-auth-submit" id="authSubmit" type="submit">Sign In</button>
+</form>
+<div class="ni-msg" id="authMsg"></div>
+<button class="ni-back" id="backToLanding">← Back to Nabeng Invoice</button>
+</div></div>
+</div>
+</section>
+<section class="ni-screen ni-dashboard ni-hidden" id="dashboardScreen">
+<nav class="ni-dash-nav"><div class="ni-logo"><img class="ni-brand-logo" data-ni-brand-logo src="/assets/nabeng-invoice-logo.png" alt="Nabeng Invoice logo"><span>Nabeng Invoice</span></div><div class="ni-user-chip"><span class="ni-avatar" id="dashAvatar">N</span><span id="dashUserName">User</span><button class="ni-btn ni-logout" id="dashLogout">Sign Out</button></div></nav>
+<main class="ni-dash-main">
+<div class="ni-welcome"><div><h1 id="dashGreeting">Welcome back</h1><p>Your invoice workspace is ready.</p></div><button class="ni-btn ni-btn-primary" id="newInvoiceBtn">+ Create New Invoice</button></div>
+<div class="ni-dash-grid"><div class="ni-dash-card"><h3>Business</h3><div class="ni-big" id="dashBusinessName">Not set</div><p id="dashBusinessContact">Add your business profile so invoices can be prepared automatically.</p></div><div class="ni-dash-card"><h3>Account</h3><div class="ni-big" id="dashEmail">—</div><p>Signed-in account</p></div><div class="ni-dash-card"><h3>Invoice workspace</h3><div class="ni-big">Ready</div><p>Your existing invoice editor is protected behind your account.</p></div></div>
+<div class="ni-actions">
+<button class="ni-action" id="editProfileBtn"><strong>Business Profile</strong><span>Save your business details and permanent logo used on invoices.</span></button>
+<button class="ni-action" id="customersBtn"><strong>Customers</strong><span>Save clients once and reuse their details on every invoice.</span></button>
+<button class="ni-action" id="dashboardInvoiceBtn"><strong>New Invoice</strong><span>Open the full invoice editor and create a new invoice.</span></button>
+<button class="ni-action" id="analyticsBtn"><strong>Revenue &amp; Analytics</strong><span>See sales, payments, outstanding balances and invoice activity.</span></button>
+<button class="ni-action" id="recurringBtn"><strong>Recurring Invoices</strong><span>Save invoice schedules and generate the next invoice when due.</span></button>
+<button class="ni-action" id="expensesBtn"><strong>Expenses</strong><span>Track business expenses and understand your real profit.</span></button>
+<button class="ni-action" id="reportsBtn"><strong>Business Reports</strong><span>Review revenue, expenses, profit and payment activity by date.</span></button>
+</div>
+<div class="ni-dash-card ni-customers-card ni-hidden" id="customerPanel">
+  <div class="ni-history-head"><div><h3>Customer Management</h3><p>Keep reusable customer names, contacts and addresses in one place.</p></div><button class="ni-small-btn" id="refreshCustomersBtn">Refresh</button></div>
+  <div class="ni-customer-form">
+    <input type="hidden" id="customerEditId">
+    <div class="ni-field"><label>Customer name</label><input id="customerName" placeholder="Customer or company name"></div>
+    <div class="ni-field"><label>Phone</label><input id="customerPhone" placeholder="055 000 0000"></div>
+    <div class="ni-field"><label>Email</label><input id="customerEmail" type="email" placeholder="customer@example.com"></div>
+    <div class="ni-field"><label>Address</label><input id="customerAddress" placeholder="Customer address"></div>
+    <div class="ni-field ni-customer-notes"><label>Notes</label><textarea id="customerNotes" rows="2" placeholder="Optional notes"></textarea></div>
+  </div>
+  <div class="ni-customer-form-actions"><button class="ni-btn ni-btn-primary" id="saveCustomerBtn">Save Customer</button><button class="ni-small-btn" id="cancelCustomerBtn" type="button">Clear</button></div>
+  <div class="ni-customer-search"><input id="customerSearch" type="search" placeholder="Search customers..."></div>
+  <div class="ni-customer-list" id="customerList"><div class="ni-history-empty">Loading customers...</div></div>
+</div>
+<div class="ni-dash-card ni-profile ni-hidden" id="profilePanel"><h3>Business Profile</h3><p>Save your business details, logo, and digital signature. They will be reused automatically on your invoices.</p><div class="ni-profile-assets">
+<div class="ni-asset-card">
+<div class="ni-asset-head"><div><div class="ni-asset-title">Business Logo</div><div class="ni-asset-help">Used on your invoices and saved to your profile.</div></div></div>
+<div class="ni-asset-preview" id="profileLogoPreview"><span>LOGO</span></div>
+<div class="ni-upload-row"><label class="ni-upload-btn">Upload Logo<input accept="image/png,image/jpeg,image/jpg" hidden="" id="profileLogoInput" type="file"/></label><button class="ni-remove-btn" id="removeLogoBtn" type="button">Remove</button></div>
+</div>
+<div class="ni-asset-card">
+<div class="ni-asset-head"><div><div class="ni-asset-title">Digital Signature</div><div class="ni-asset-help">PNG or JPG, max 2MB. Automatically placed on generated invoices.</div></div></div>
+<div class="ni-asset-preview signature" id="profileSignaturePreview"><span>No signature</span></div>
+<div class="ni-upload-row"><label class="ni-upload-btn">Upload Signature<input accept="image/png,image/jpeg,image/jpg" hidden="" id="profileSignatureInput" type="file"/></label><button class="ni-remove-btn" id="removeSignatureBtn" type="button">Remove</button></div>
+</div>
+</div><div class="ni-profile-grid"><div class="ni-field"><label>Business name</label><input id="profileBusinessName" placeholder="Your business name"/></div><div class="ni-field"><label>Business email</label><input id="profileBusinessEmail" placeholder="business@example.com" type="email"/></div><div class="ni-field"><label>Business phone</label><input id="profileBusinessPhone" placeholder="Phone number"/></div><div class="ni-field"><label>Business address</label><input id="profileBusinessAddress" placeholder="Business address"/></div></div><button class="ni-btn ni-btn-primary ni-profile-save" id="saveProfileBtn">Save Business Profile</button><div class="ni-msg" id="profileMsg"></div></div>
+<div class="ni-dash-card ni-analytics-card ni-hidden" id="analyticsPanel">
+  <div class="ni-history-head"><div><h3>Revenue &amp; Analytics</h3><p>Live totals calculated from your saved invoices and payment records.</p></div><button class="ni-small-btn" id="refreshAnalyticsBtn">Refresh</button></div>
+  <div class="ni-analytics-grid">
+    <div class="ni-metric"><span>Total invoiced</span><strong id="metricInvoiced">Ghc 0.00</strong></div>
+    <div class="ni-metric"><span>Total collected</span><strong id="metricCollected">Ghc 0.00</strong></div>
+    <div class="ni-metric"><span>Outstanding</span><strong id="metricOutstanding">Ghc 0.00</strong></div>
+    <div class="ni-metric"><span>Paid invoices</span><strong id="metricPaidInvoices">0</strong></div>
+    <div class="ni-metric"><span>Open invoices</span><strong id="metricOpenInvoices">0</strong></div>
+    <div class="ni-metric"><span>Overdue invoices</span><strong id="metricOverdueInvoices">0</strong></div>
+  </div>
+  <div class="ni-analytics-detail" id="analyticsDetail"></div>
+</div>
+<div class="ni-dash-card ni-phase4-card ni-hidden" id="recurringPanel">
+  <div class="ni-history-head"><div><h3>Recurring Invoices</h3><p>Save a reusable invoice schedule and generate the next invoice without rebuilding it.</p></div><button class="ni-small-btn" id="refreshRecurringBtn">Refresh</button></div>
+  <div class="ni-phase4-form">
+    <div class="ni-field"><label>Schedule name</label><input id="recurringName" placeholder="Monthly design service"></div>
+    <div class="ni-field"><label>Customer</label><select id="recurringCustomer"><option value="">Select customer</option></select></div>
+    <div class="ni-field"><label>Frequency</label><select id="recurringFrequency"><option value="weekly">Weekly</option><option value="monthly" selected>Monthly</option><option value="quarterly">Quarterly</option><option value="yearly">Yearly</option></select></div>
+    <div class="ni-field"><label>Next invoice date</label><input id="recurringNextDate" type="date"></div>
+    <div class="ni-field"><label>Due days after invoice</label><input id="recurringDueDays" type="number" min="0" value="7"></div>
+    <div class="ni-field"><label>Active</label><select id="recurringActive"><option value="true">Active</option><option value="false">Paused</option></select></div>
+  </div>
+  <div class="ni-phase4-actions"><button class="ni-btn ni-btn-primary" id="saveRecurringBtn">Save Current Invoice as Schedule</button><button class="ni-small-btn" id="clearRecurringBtn">Clear</button></div>
+  <div class="ni-phase4-list" id="recurringList"><div class="ni-history-empty">Loading schedules...</div></div>
+</div>
+<div class="ni-dash-card ni-phase4-card ni-hidden" id="expensesPanel">
+  <div class="ni-history-head"><div><h3>Expense Tracking</h3><p>Record business costs so your dashboard can show a clearer profit picture.</p></div><button class="ni-small-btn" id="refreshExpensesBtn">Refresh</button></div>
+  <div class="ni-phase4-form">
+    <input type="hidden" id="expenseEditId">
+    <div class="ni-field"><label>Description</label><input id="expenseDescription" placeholder="Printing materials"></div>
+    <div class="ni-field"><label>Category</label><select id="expenseCategory"><option>Supplies</option><option>Transport</option><option>Utilities</option><option>Rent</option><option>Marketing</option><option>Staff</option><option>Equipment</option><option>Other</option></select></div>
+    <div class="ni-field"><label>Amount</label><input id="expenseAmount" type="number" min="0.01" step="0.01" placeholder="0.00"></div>
+    <div class="ni-field"><label>Date</label><input id="expenseDate" type="date"></div>
+    <div class="ni-field ni-phase4-full"><label>Notes</label><textarea id="expenseNotes" rows="2" placeholder="Optional notes"></textarea></div>
+  </div>
+  <div class="ni-phase4-actions"><button class="ni-btn ni-btn-primary" id="saveExpenseBtn">Save Expense</button><button class="ni-small-btn" id="clearExpenseBtn">Clear</button></div>
+  <div class="ni-phase4-list" id="expenseList"><div class="ni-history-empty">Loading expenses...</div></div>
+</div>
+<div class="ni-dash-card ni-phase4-card ni-hidden" id="reportsPanel">
+  <div class="ni-history-head"><div><h3>Business Reports</h3><p>Filter your business activity by date and review revenue, collections, expenses and profit.</p></div><button class="ni-small-btn" id="refreshReportsBtn">Refresh</button></div>
+  <div class="ni-report-filters"><div class="ni-field"><label>From</label><input id="reportFrom" type="date"></div><div class="ni-field"><label>To</label><input id="reportTo" type="date"></div><button class="ni-btn ni-btn-primary" id="runReportBtn">Run Report</button></div>
+  <div class="ni-analytics-grid"><div class="ni-metric"><span>Revenue</span><strong id="reportRevenue">Ghc 0.00</strong></div><div class="ni-metric"><span>Collected</span><strong id="reportCollected">Ghc 0.00</strong></div><div class="ni-metric"><span>Expenses</span><strong id="reportExpenses">Ghc 0.00</strong></div><div class="ni-metric"><span>Profit</span><strong id="reportProfit">Ghc 0.00</strong></div><div class="ni-metric"><span>Invoices</span><strong id="reportInvoiceCount">0</strong></div><div class="ni-metric"><span>Payments</span><strong id="reportPaymentCount">0</strong></div></div>
+  <div class="ni-report-breakdown" id="reportBreakdown"></div>
+</div>
+<div class="ni-dash-card ni-history-card"><div class="ni-history-head"><div><h3>Invoice History</h3><p>Track invoices, payments, balances and due dates.</p></div><button class="ni-small-btn" id="refreshInvoicesBtn">Refresh</button></div>
+<div class="ni-history-tools">
+  <input id="invoiceHistorySearch" type="search" placeholder="Search invoice number or client...">
+  <select id="invoiceHistoryStatus">
+    <option value="all">All statuses</option>
+    <option value="unpaid">Unpaid</option>
+    <option value="partial">Partially Paid</option>
+    <option value="paid">Paid</option>
+    <option value="overdue">Overdue</option>
+  </select>
+</div>
+<div class="ni-history-list" id="invoiceHistoryList"><div class="ni-history-empty">Loading invoices...</div></div></div>
+</main>
+</section>
+<div class="ni-editor-bar ni-hidden" id="editorBar"><div class="ni-editor-title"><span class="ni-inline-brand"><img data-ni-brand-logo src="/assets/nabeng-invoice-logo.png" alt="Nabeng Invoice logo"><strong>Nabeng Invoice</strong></span> <span style="color:#94a3b8;font-weight:600">/ Invoice Editor</span></div><div class="ni-editor-actions"><button class="ni-editor-btn" id="backDashboardBtn">← Dashboard</button><button class="ni-editor-btn" id="editorSignOut">Sign Out</button></div></div>
+<div class="app ni-hidden" id="invoiceApp">
+<!-- ============ FORM ============ -->
+<div class="form-panel">
+<p class="brand"><span class="ni-form-brand"><img data-ni-brand-logo src="/assets/nabeng-invoice-logo.png" alt="Nabeng Invoice logo"><strong>Nabeng Invoice Generator</strong></span></p>
+<p class="brand-sub">Create a clean, professional invoice. Your preview updates instantly as you type.</p>
+<fieldset>
+<legend>Business</legend>
+<div class="field">
+<label>Logo</label>
+<div class="logo-upload">
+<div class="logo-preview" id="logoPreview"><span>No logo</span></div>
+<label class="file-btn">Upload logo<input accept="image/*" id="logoInput" style="display:none;" type="file"/></label>
+</div>
+</div>
+<div class="field">
+<label for="bizName">Business name</label>
+<input id="bizName" value="Nabeng Print Media"/>
+</div>
+<div class="field">
+<label for="bizAddress">Address</label>
+<input id="bizAddress" value="Awutu Bawjiase, Near D/A Basic School"/>
+</div>
+<div class="field">
+<label for="bizTel">Phone</label>
+<input id="bizTel" value="0599581301 / 0201443088"/>
+</div>
+</fieldset>
+<fieldset>
+<legend>Client &amp; invoice info</legend>
+<div class="field">
+<label for="invoiceCustomer">Saved customer</label>
+<select id="invoiceCustomer"><option value="">Select a saved customer or enter details below</option></select>
+</div>
+<div class="field">
+<label for="clientName">Client's name</label>
+<input id="clientName" placeholder="e.g. Leticia Osardu"/>
+</div>
+<div class="row2">
+<div class="field">
+<label for="clientAddress">Address</label>
+<input id="clientAddress" placeholder=" Awutu Bawjiase"/>
+</div>
+<div class="field">
+<label for="clientNumber">Number</label>
+<input id="clientNumber" placeholder=" 0557734900 "/>
+</div>
+</div>
+<div class="row2">
+<div class="field">
+<label for="invDate">Invoice date</label>
+<input id="invDate" type="date"/>
+</div>
+<div class="field">
+<label for="invNumber">Invoice no.</label>
+<input id="invNumber" placeholder="Auto-generated"/>
+</div>
+</div>
+<div class="row2">
+<div class="field">
+<label for="invDueDate">Due date</label>
+<input id="invDueDate" type="date"/>
+</div>
+<div class="field">
+<label for="invPaymentStatus">Payment status</label>
+<select id="invPaymentStatus">
+<option value="unpaid">Unpaid</option>
+<option value="partial">Partially Paid</option>
+<option value="paid">Paid</option>
+</select>
+</div>
+</div>
+<div class="row2">
+<div class="field">
+<label for="invAmountPaid">Amount paid</label>
+<input id="invAmountPaid" type="number" min="0" step="0.01" value="0" placeholder="0.00"/>
+</div>
+<div class="field">
+<label for="invPaymentDate">Payment date</label>
+<input id="invPaymentDate" type="date"/>
+</div>
+</div>
+<div class="field">
+<label for="invPaymentMethod">Payment method</label>
+<select id="invPaymentMethod">
+<option value="">Not recorded</option>
+<option>Cash</option>
+<option>Mobile Money</option>
+<option>Bank Transfer</option>
+<option>Card</option>
+<option>Other</option>
+</select>
+</div>
+<div class="ni-balance-preview"><span>Balance due</span><strong id="invBalancePreview">Ghc 0.00</strong></div>
+</fieldset>
+<fieldset>
+<legend>Pricing adjustments</legend>
+<div class="row2">
+<div class="field"><label for="invDiscountType">Discount</label><select id="invDiscountType"><option value="none">No discount</option><option value="amount">Fixed amount</option><option value="percent">Percentage</option></select></div>
+<div class="field"><label for="invDiscountValue">Discount value</label><input id="invDiscountValue" type="number" min="0" step="0.01" value="0" placeholder="0.00"/></div>
+</div>
+<div class="row2">
+<div class="field"><label for="invTaxRate">Tax rate (%)</label><input id="invTaxRate" type="number" min="0" step="0.01" value="0" placeholder="0.00"/></div>
+<div class="field"><label>Calculated total</label><div class="ni-balance-preview"><span>Invoice total</span><strong id="invTotalPreview">Ghc 0.00</strong></div></div>
+</div>
+</fieldset>
+<fieldset>
+<legend>Items</legend>
+<div id="itemsWrap"></div>
+<button class="add-item" id="addItemBtn" type="button">+ Add row</button>
+</fieldset>
+<fieldset>
+<legend>Currency</legend>
+<div class="field">
+<label for="currency">Symbol / code shown in table</label>
+<input id="currency" value="Ghc"/>
+</div>
+</fieldset>
+<fieldset>
+<legend>Digital Signature</legend>
+<div class="signature-upload">
+<div class="signature-preview" id="signaturePreview">
+<span>No signature</span>
+</div>
+<div class="signature-actions">
+<label class="signature-btn">
+            Upload Signature
+            <input accept="image/png,image/jpeg,image/jpg" id="signatureInput" style="display:none;" type="file"/>
+</label>
+<button class="signature-remove" id="removeSignatureBtn" type="button">Remove</button>
+<small>PNG or JPG • Transparent background recommended</small>
+</div>
+</div>
+</fieldset>
+<div class="ni-editor-bottom-actions"><button class="print-btn" id="printBtn">Download PDF</button><button class="ni-secondary-btn" id="receiptBtn" type="button">Receipt</button><button class="ni-secondary-btn" id="whatsappBtn" type="button">WhatsApp</button></div>
+</div>
+<!-- ============ PREVIEW ============ -->
+<div class="preview-panel">
+<div class="sheet" id="sheet">
+<div class="head">
+<div class="logo-circle" id="pLogoCircle"><span>LOGO</span></div>
+<div class="head-text">
+<p class="biz-name" id="pBizName">Nabeng Print Media</p>
+<p class="biz-line" id="pBizAddress">Awutu Bawjiase</p>
+<p class="biz-line" id="pBizTel">Tel: 0599581301 / 0201443088</p>
+</div>
+</div>
+<div class="invoice-band">INVOICE</div>
+<div class="details">
+<div class="dline">
+<span class="dlabel">Client's Name</span>
+<span class="dval" id="pClientName"> </span>
+</div>
+<div class="details-row">
+<div class="dline">
+<span class="dlabel">Address</span>
+<span class="dval" id="pClientAddress"> </span>
+</div>
+<div class="dline">
+<span class="dlabel">Number</span>
+<span class="dval" id="pClientNumber"> </span>
+</div>
+</div>
+<div class="details-row">
+<div class="dline">
+<span class="dlabel">Date</span>
+<span class="dval" id="pInvDate"> </span>
+</div>
+<div class="dline">
+<span class="dlabel">Invoice No.</span>
+<span class="dval" id="pInvNumber"> </span>
+</div>
+</div>
+<div class="details-row">
+<div class="dline">
+<span class="dlabel">Due Date</span>
+<span class="dval" id="pInvDueDate"> </span>
+</div>
+<div class="dline">
+<span class="dlabel">Balance Due</span>
+<span class="dval" id="pInvBalance"> </span>
+</div>
+</div>
+</div>
+<table class="items">
+<thead>
+<tr>
+<th class="qty">Qty</th>
+<th class="desc">Description</th>
+<th class="rate" id="pRateHeader">Unit Cost<br/>Ghc</th>
+<th class="amount" id="pAmountHeader">Sub Total<br/>Ghc</th>
+</tr>
+</thead>
+<tbody id="pItemsBody"></tbody>
+</table>
+<div class="ni-preview-summary" id="pSummary">
+<div><span>Subtotal</span><strong id="pSubtotal">0.00</strong></div>
+<div><span>Discount</span><strong id="pDiscount">0.00</strong></div>
+<div><span>Tax</span><strong id="pTax">0.00</strong></div>
+</div>
+<div class="total-wrap">
+<div class="total-box">
+<span class="total-label">TOTAL</span>
+<span class="total-value" id="pTotal">0.00</span>
+</div>
+</div>
+<div class="spacer"></div>
+<div class="digital-signature-row" id="digitalSignatureRow" style="display:none;">
+<div class="digital-signature-block">
+<img alt="Digital signature" id="pSignature"/>
+<div class="digital-signature-line"></div>
+<p>MANAGER</p>
+</div>
+</div>
+<div class="footer-strip">
+<div class="band"></div>
+<div class="wedge"></div>
+</div>
+</div>
+</div>
+</div>
+
+
+<div class="ni-modal ni-hidden" id="paymentModal"><div class="ni-modal-card"><div class="ni-modal-head"><div><h3>Record Payment</h3><p id="paymentModalInvoice">Invoice payment</p></div><button class="ni-modal-close" id="closePaymentModal">&times;</button></div><div class="ni-modal-grid"><div class="ni-field"><label>Amount</label><input id="recordPaymentAmount" type="number" min="0.01" step="0.01"></div><div class="ni-field"><label>Payment date</label><input id="recordPaymentDate" type="date"></div><div class="ni-field"><label>Payment method</label><select id="recordPaymentMethod"><option>Cash</option><option>Mobile Money</option><option>Bank Transfer</option><option>Card</option><option>Other</option></select></div><div class="ni-field"><label>Reference</label><input id="recordPaymentReference" placeholder="Transaction / receipt reference"></div><div class="ni-field ni-modal-full"><label>Notes</label><textarea id="recordPaymentNotes" rows="3" placeholder="Optional payment notes"></textarea></div></div><div class="ni-modal-actions"><button class="ni-small-btn" id="cancelPaymentBtn">Cancel</button><button class="ni-btn ni-btn-primary" id="savePaymentBtn">Save Payment</button></div></div></div>
+<div class="ni-modal ni-hidden" id="receiptModal"><div class="ni-modal-card ni-receipt-modal"><div class="ni-modal-head"><div><h3>Payment Receipt</h3><p>Ready to download or share.</p></div><button class="ni-modal-close" id="closeReceiptModal">&times;</button></div><div id="receiptContent"></div><div class="ni-modal-actions"><button class="ni-small-btn" id="closeReceiptBtn">Close</button><button class="ni-btn ni-btn-primary" id="downloadReceiptBtn">Download Receipt PDF</button></div></div></div>
+
+</body>
+</html>
