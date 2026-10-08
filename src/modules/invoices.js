@@ -51,7 +51,7 @@ async function niOpenSavedInvoice(id){
   const {data,error}=await NI.state.niSupabase.from('invoices').select('*').eq('id',id).eq('user_id',NI.state.niSession.id).single();
   if(error){alert(error.message);return;}
   NI.state.niEditingInvoiceId=data.id; NI.state.niCurrentInvoice=data;
-  NI.state.items=Array.isArray(data.NI.state.items)?data.NI.state.items.map(x=>({qty:x.qty||'',desc:x.desc||'',rate:x.rate??''})):[];
+  NI.state.items=Array.isArray(data.items)?data.items.map(x=>({qty:x.qty||'',desc:x.desc||'',rate:x.rate??''})):[];
   if(!NI.state.items.length)NI.state.items=[{qty:'',desc:'',rate:''}];
   const set=(id,val)=>{const el=NI.$(id);if(el)el.value=val??'';};
   NI.niApplySignatureToEditor(data.signature_url||NI.state.niProfile?.signature_url||'');set('invoiceCustomer',data.customer_id||'');set('clientName',data.client_name);set('clientAddress',data.client_address);set('clientNumber',data.client_number);set('invDate',data.invoice_date);set('invNumber',data.invoice_number);set('currency',data.currency||'Ghc');set('invDueDate',data.due_date);set('invAmountPaid',data.amount_paid??0);set('invPaymentDate',data.payment_date);set('invPaymentMethod',data.payment_method);set('invPaymentStatus',NI.niNormalStatus(data.status));set('invDiscountType',data.discount_type||'none');set('invDiscountValue',data.discount_value??0);set('invTaxRate',data.tax_rate??0);

@@ -113,6 +113,17 @@ import "../runtime.js";
     if(NI.$('pTax'))NI.$('pTax').textContent=(document.getElementById('currency').value||'Ghc')+' '+NI.niMoney(pricing.taxAmount);
   }
 
+  // Expose editor helpers through the shared NI namespace because other modules
+  // (invoice history, new invoice, Phase 4, etc.) call them through NI.*.
+  Object.assign(NI, {
+    fmt,
+    escapeAttr,
+    escapeHtml,
+    formatDate,
+    renderItemRows,
+    renderPreview
+  });
+
   addItemBtn.addEventListener('click', () => {
     NI.state.items.push({ qty: '', desc: '', rate: '' });
     NI.renderItemRows();
@@ -272,4 +283,3 @@ import "../runtime.js";
   NI.renderPreview();
 
 
-NI.niWire();

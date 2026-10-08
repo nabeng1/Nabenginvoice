@@ -46,7 +46,7 @@ async function niGenerateRecurringInvoice(id){
   NI.niNewInvoice();
   NI.$('invoiceCustomer').value=data.customer_id||'';NI.niApplySelectedCustomer();
   NI.$('clientName').value=data.client_name||NI.$('clientName').value;NI.$('clientAddress').value=data.client_address||NI.$('clientAddress').value;NI.$('clientNumber').value=data.client_number||NI.$('clientNumber').value;NI.$('bizName').value=data.business_name||NI.$('bizName').value;NI.$('bizAddress').value=data.business_address||NI.$('bizAddress').value;NI.$('bizTel').value=data.business_phone||NI.$('bizTel').value;NI.$('currency').value=data.currency||'Ghc';
-  NI.state.items=(data.NI.state.items||[]).map(x=>({qty:x.qty||'',desc:x.desc||'',rate:x.rate??''}));if(!NI.state.items.length)NI.state.items=[{qty:'',desc:'',rate:''}];
+  NI.state.items=(data.items||[]).map(x=>({qty:x.qty||'',desc:x.desc||'',rate:x.rate??''}));if(!NI.state.items.length)NI.state.items=[{qty:'',desc:'',rate:''}];
   NI.$('invDiscountType').value=data.discount_type||'none';NI.$('invDiscountValue').value=data.discount_value??0;NI.$('invTaxRate').value=data.tax_rate??0;NI.$('invDueDate').value=(()=>{const d=new Date(NI.niToday()+'T00:00:00');d.setDate(d.getDate()+Math.max(0,Number(data.due_days)||0));return d.toISOString().slice(0,10);})();
   NI.renderItemRows();NI.renderPreview();NI.niUpdatePaymentPreview();NI.niOpenEditor();
   await NI.state.niSupabase.from('recurring_invoices').update({next_invoice_date:NI.niDateAdd(data.next_invoice_date||NI.niToday(),data.frequency),updated_at:new Date().toISOString()}).eq('id',id).eq('user_id',NI.state.niSession.id);
