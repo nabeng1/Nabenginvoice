@@ -2,11 +2,10 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
     base: '/',
-    build: {
-        sourcemap: false
-    }
+
     build: {
         sourcemap: false,
+
         rollupOptions: {
             output: {
                 entryFileNames: 'assets/[name]-[hash].js',
