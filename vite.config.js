@@ -1,3 +1,4 @@
+
 import { defineConfig } from 'vite';
 
 export default defineConfig({
@@ -7,6 +8,11 @@ export default defineConfig({
         sourcemap: false,
 
         rollupOptions: {
+            input: {
+                main: 'index.html',
+                income: 'income.html'
+            },
+
             output: {
                 entryFileNames: 'assets/[name]-[hash].js',
                 chunkFileNames: 'assets/[name]-[hash].js',
