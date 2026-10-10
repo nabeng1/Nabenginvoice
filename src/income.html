@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <title>Nabeng Income Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <style>
+  *{box-sizing:border-box} :root{--bg:#f4f7fb;--surface:#fff;--ink:#142033;--muted:#78859a;--line:#e5eaf2;--navy:#101827;--green:#148568;--shadow:0 16px 45px rgba(22,37,61,.07);--red:#b54735}body{margin:0;min-height:100vh;background:radial-gradient(circle at 3% 0%,#e1f4ee 0,transparent 25%),radial-gradient(circle at 100% 10%,#e9edff 0,transparent 24%),var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif}button,input,select{font:inherit}button{cursor:pointer}h1,h2,h3,p{margin-top:0}.hidden{display:none!important}.app{width:min(1200px,calc(100% - 36px));margin:28px auto 36px}.eyebrow{margin:0 0 5px;color:#8490a2;font-size:10px;font-weight:800;letter-spacing:1.65px}.muted{color:var(--muted)}.small-text{font-size:12px;line-height:1.55;margin:6px 0 0}.tiny{font-size:11px;line-height:1.5}.topbar,.brand-row{display:flex;align-items:center;gap:13px}.brand-mark{display:grid;place-items:center;width:48px;height:48px;flex-shrink:0;border-radius:16px;background:linear-gradient(145deg,#111d31,#243653);color:#f6d991;font:800 25px Manrope;box-shadow:0 9px 24px #10182722}.topbar h1,.brand-row h1{margin:0;font:800 20px Manrope;letter-spacing:-.5px}.top-actions{display:flex;align-items:center;gap:10px;margin-left:auto}.cloud-status{display:flex;align-items:center;gap:7px;color:#28765e;background:#effaf5;border:1px solid #d9eee6;border-radius:99px;padding:9px 12px;font-size:11px;font-weight:800}.cloud-status i{width:7px;height:7px;border-radius:50%;background:#28a879}.cloud-status.offline{color:#9a5b14;background:#fff8e9;border-color:#f2dfb8}.cloud-status.offline i{background:#d18a28}.welcome-row{display:flex;align-items:end;justify-content:space-between;gap:20px;margin:40px 0 22px}.welcome-row h2{margin:0 0 8px;font:800 clamp(28px,4vw,39px)/1.15 Manrope;letter-spacing:-1.4px}.welcome-row p:last-child{margin-bottom:0;font-size:13px;line-height:1.65}.date-chip{padding:11px 14px;border:1px solid var(--line);border-radius:12px;background:#ffffffbd;color:#667287;font-size:11px;font-weight:700;white-space:nowrap}.metric-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}.metric-card{min-width:0;padding:19px;border:1px solid #e8edf4;border-radius:18px;background:#fff;box-shadow:0 6px 22px #17243c05}.metric-card.dark{background:linear-gradient(130deg,#101827,#1d304b);color:#fff;border-color:#101827}.metric-icon{display:grid;place-items:center;width:36px;height:36px;margin-bottom:16px;border-radius:12px;background:#edf1f7;color:#4e5c72;font-weight:800;font-size:18px}.metric-icon.green{background:#eaf7f1;color:#148568}.metric-icon.blue{background:#edf1ff;color:#3c66d6}.metric-icon.amber{background:#fff4e4;color:#bd7b1f}.metric-card p{margin:0 0 7px;color:#8792a4;font-size:11px;font-weight:700}.metric-card.dark p{color:#b7c2d2}.metric-card h3{margin:0 0 7px;overflow-wrap:anywhere;font:800 clamp(19px,2.4vw,25px) Manrope;letter-spacing:-.6px}.metric-card small{color:#9ba5b4;font-size:10px;line-height:1.4}.warning-banner{display:flex;gap:13px;align-items:flex-start;margin:16px 0;padding:15px 17px;border:1px solid #f0d4a2;border-radius:15px;background:#fff8e9;color:#7c5115}.warning-symbol{display:grid;place-items:center;flex-shrink:0;width:28px;height:28px;border-radius:9px;background:#fbe8c2;font-weight:900}.warning-banner strong{font-size:12px}.warning-banner p{margin:4px 0 0;font-size:11px;line-height:1.6}.main-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:15px;margin-top:17px}.panel{min-width:0;padding:22px;border:1px solid #e7ecf3;border-radius:19px;background:#fff;box-shadow:var(--shadow)}.panel-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:20px}.panel-heading h3,.section-heading h3{margin:0;font:800 18px Manrope;letter-spacing:-.45px}.panel-icon{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:#eaf7f1;color:var(--green);font-size:22px}.income-panel label,.allocation-editor label{display:block;margin:15px 0 8px;color:#4c596d;font-size:11px;font-weight:800}.money-input{display:flex;align-items:center;gap:12px;padding:5px 14px;border:1.5px solid #dce4ed;border-radius:13px;transition:.2s}.money-input:focus-within{border-color:var(--green);box-shadow:0 0 0 4px #14856815}.money-input span{color:var(--green);font-weight:800}.money-input input{width:100%;min-width:0;padding:11px 0;border:0;outline:0;background:transparent;color:var(--ink);font:800 28px Manrope}.money-input input::-webkit-inner-spin-button,.money-input input::-webkit-outer-spin-button{appearance:none}.quick-amounts{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.quick-amounts button{flex:1;padding:8px 9px;border:1px solid var(--line);border-radius:9px;background:#fff;color:#536176;font-size:10px;font-weight:800}.quick-amounts button:hover{border-color:#9bcfbd;background:#f4fbf8;color:var(--green)}input[type=email],input[type=password],input[type=text],input[type=number]{outline:none}#incomeNote,.allocation-editor input{width:100%;padding:11px 12px;border:1px solid #dce4ed;border-radius:10px;background:#fff;color:var(--ink)}#incomeNote:focus,.allocation-editor input:focus{border-color:var(--green);box-shadow:0 0 0 3px #14856812}.optional{color:#9ba5b4;font-weight:500}.btn{display:inline-flex;justify-content:center;align-items:center;gap:7px;padding:11px 14px;border:1px solid #dfe5ed;border-radius:10px;background:#fff;color:#344258;font-size:11px;font-weight:800;transition:transform .15s,background .15s}.btn:hover{transform:translateY(-1px)}.btn.primary{border-color:var(--navy);background:var(--navy);color:#fff}.btn.outline{background:#fff}.btn.full{width:100%;margin-top:17px;padding:13px}.btn.small{padding:9px 11px}.message{min-height:14px;margin:10px 0 0;color:var(--green);font-size:11px;line-height:1.5}.message.error{color:var(--red)}.overview-total{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #edf0f5}.overview-total:first-of-type{padding-top:0}.overview-total span{color:#7c879a;font-size:11px}.overview-total strong{font:800 15px Manrope;text-align:right}.danger-text{color:var(--red)}.mini-bar{height:8px;margin-top:18px;overflow:hidden;border-radius:99px;background:#edf0f5}.mini-bar span{display:block;height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,#148568,#d18a28);transition:width .3s}.overview-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:17px}.section-heading{display:flex;justify-content:space-between;align-items:end;gap:14px;margin:33px 0 15px}.allocation-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.allocation-card{--accent:#148568;--tint:#eaf7f1;padding:19px;min-width:0;border:1px solid #e7ecf3;border-radius:17px;background:#fff;box-shadow:0 6px 22px #17243c05}.allocation-card.reinvest{--accent:#148568;--tint:#eaf7f1}.allocation-card.business-savings{--accent:#3778cb;--tint:#edf4ff}.allocation-card.personal{--accent:#d18a28;--tint:#fff4e4}.allocation-card.fun{--accent:#a45bc6;--tint:#f7effc}.allocation-card.savings{--accent:#3c66d6;--tint:#edf1ff}.allocation-card.others{--accent:#64748b;--tint:#f0f3f7}.allocation-card.maintenance{--accent:#cf5c48;--tint:#fff0ed}.alloc-top{display:flex;justify-content:space-between;align-items:center;gap:8px}.alloc-icon{display:grid;place-items:center;width:39px;height:39px;border-radius:12px;background:var(--tint);color:var(--accent);font-size:20px}.alloc-percent{padding:6px 9px;border-radius:8px;background:var(--tint);color:var(--accent);font-size:11px;font-weight:900}.alloc-name{margin:15px 0 5px;font:800 14px Manrope;line-height:1.4}.alloc-desc{min-height:31px;margin:0;color:#8993a3;font-size:10px;line-height:1.5}.alloc-amount{margin:16px 0 12px;overflow-wrap:anywhere;font:800 clamp(20px,2.4vw,25px) Manrope;letter-spacing:-.6px}.alloc-track{height:6px;overflow:hidden;border-radius:99px;background:#eef1f5}.alloc-fill{height:100%;border-radius:inherit;background:var(--accent);transition:width .3s}.alloc-foot{display:flex;justify-content:space-between;gap:7px;margin-top:9px;color:#98a2b0;font-size:9px}.allocation-editor{margin-top:18px}.icon-button{width:32px;height:32px;border:0;border-radius:9px;background:#f1f4f8;color:#586579;font-size:22px}.allocation-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 16px}.allocation-fields .field{display:grid;grid-template-columns:minmax(0,1fr) 95px;align-items:center;gap:10px}.allocation-fields label{margin:8px 0}.allocation-fields input{padding:9px}.editor-total{display:flex;justify-content:space-between;align-items:center;margin:17px 0 5px;padding:13px 0;border-top:1px solid var(--line);font-size:12px;font-weight:800}.editor-total strong{font:800 18px Manrope}.warning-inline{margin:0 0 15px;color:#a16207;font-size:11px}.history-panel{margin-top:25px}.history-heading{align-items:center;margin-bottom:14px}.table-wrap{width:100%;overflow-x:auto}table{width:100%;border-collapse:collapse;text-align:left}th{padding:11px 10px;background:#f7f9fc;color:#7b8799;font-size:10px;font-weight:800;white-space:nowrap}td{padding:13px 10px;border-bottom:1px solid #eef1f5;color:#4c596d;font-size:11px;white-space:nowrap}td.money{font-weight:800;color:var(--ink)}.status-pill{display:inline-block;padding:5px 8px;border-radius:8px;background:#eaf7f1;color:#21765e;font-size:10px;font-weight:800}.status-pill.warning{background:#fff4df;color:#9a6115}.row-action{border:0;background:transparent;color:#536b99;font-size:10px;font-weight:800}.empty-row{text-align:center;color:#98a2b0;padding:25px 10px}.auth-wrap{display:grid;place-items:center;min-height:100vh;padding:24px}.auth-card{width:min(460px,100%);padding:30px;border:1px solid #e6ebf2;border-radius:24px;background:#fff;box-shadow:var(--shadow)}.auth-intro{margin:32px 0 22px}.auth-intro .eyebrow{color:var(--green)}.auth-intro h2{margin:0 0 9px;font:800 30px/1.15 Manrope;letter-spacing:-1px}.auth-intro p:last-child{margin:0;color:var(--muted);font-size:13px;line-height:1.6}.auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:4px;border-radius:11px;background:#f1f4f8;margin-bottom:20px}.tab{padding:10px;border:0;border-radius:8px;background:transparent;color:#78859a;font-size:12px;font-weight:800}.tab.active{background:#fff;color:var(--ink);box-shadow:0 2px 8px #17243c0b}.auth-card label{display:block;margin:14px 0 7px;color:#4c596d;font-size:11px;font-weight:800}.auth-card input,.auth-card select,.profile-form input,.profile-form select{width:100%;padding:12px;border:1px solid #dce4ed;border-radius:10px;background:#fff;color:var(--ink)}.auth-card input:focus,.auth-card select:focus,.profile-form input:focus,.profile-form select:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px #14856812}.fine-print{margin:17px 0 0;color:#9aa4b2;font-size:10px;line-height:1.6}footer{margin-top:30px;text-align:center;color:#9aa3b0;font-size:10px}footer span{margin:0 5px;color:var(--green)}
+@media(max-width:950px){.metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.allocation-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.app{width:min(100% - 28px,900px)}}
+@media(max-width:650px){.app{margin-top:17px}.topbar h1{font-size:17px}.brand-mark{width:43px;height:43px}.top-actions{gap:6px}.cloud-status{font-size:0;padding:10px}.cloud-status i{width:8px;height:8px}.welcome-row{align-items:flex-start;flex-direction:column;margin-top:30px}.date-chip{display:none}.metric-card{padding:15px}.metric-card h3{font-size:20px}.main-grid{grid-template-columns:1fr}.panel{padding:18px}.allocation-grid{grid-template-columns:1fr}.alloc-desc{min-height:0}.section-heading{align-items:flex-start;flex-direction:column}.allocation-fields{grid-template-columns:1fr}.history-heading{align-items:flex-start}.auth-card{padding:23px}.auth-intro h2{font-size:27px}.overview-actions .btn{flex:1}}
+@media print{body{background:#fff}.app{width:100%;margin:0}.top-actions,.income-panel,.section-heading button,.allocation-editor,.history-panel,.overview-actions,footer,.quick-amounts{display:none!important}.welcome-row{margin:20px 0}.metric-grid{grid-template-columns:repeat(4,1fr)}.main-grid{grid-template-columns:1fr}.allocation-grid{grid-template-columns:repeat(3,1fr)}.panel,.metric-card,.allocation-card{box-shadow:none;break-inside:avoid}.warning-banner{print-color-adjust:exact}.auth-wrap{display:none!important}}
+
+.auth-field-grid,.profile-field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 13px}.profile-page{margin-top:25px}.profile-form{max-width:720px}.profile-form label{display:block;margin:14px 0 7px;color:#4c596d;font-size:11px;font-weight:800}.profile-avatar{display:grid;place-items:center;width:66px;height:66px;margin:0 0 16px;border-radius:22px;background:linear-gradient(145deg,#111d31,#243653);color:#f6d991;font:800 27px Manrope}.profile-full{grid-column:1/-1}.profile-form button{margin-top:18px}.profile-form .tiny{margin:5px 0 0}.auth-field-grid>div{min-width:0}.auth-field-grid input{min-width:0}.profile-field-grid>div{min-width:0}.profile-form input:disabled{background:#f4f6f9;color:#7b8799;cursor:not-allowed}
+@media(max-width:650px){.auth-field-grid,.profile-field-grid{grid-template-columns:1fr}.top-actions .btn{padding:8px;font-size:10px}.profile-full{grid-column:auto}}
+
+  </style>
+</head>
+<body>
+  <div id="authView" class="auth-wrap">
+    <section class="auth-card">
+      <div class="brand-row"><div class="brand-mark">N</div><div><p class="eyebrow">NABENG • PERSONAL FINANCE</p><h1>Nabeng Income</h1></div></div>
+      <div class="auth-intro"><p class="eyebrow">YOUR MONEY, WITH A PLAN</p><h2>Give every cedi a purpose.</h2><p>Sign in to securely access your income plan across your devices.</p></div>
+      <div class="auth-tabs"><button type="button" class="tab active" id="signInTab">Sign in</button><button type="button" class="tab" id="signUpTab">Create account</button></div>
+      <form id="authForm">
+        <div id="signUpFields" class="hidden">
+          <div class="auth-field-grid">
+            <div><label for="authFirstName">First name</label><input id="authFirstName" type="text" autocomplete="given-name" placeholder="First name"></div>
+            <div><label for="authSurname">Surname</label><input id="authSurname" type="text" autocomplete="family-name" placeholder="Surname"></div>
+          </div>
+          <label for="authDob">Date of birth</label><input id="authDob" type="date" autocomplete="bday">
+          <label for="authGender">Gender</label><select id="authGender"><option value="">Select gender</option><option value="Female">Female</option><option value="Male">Male</option><option value="Prefer not to say">Prefer not to say</option><option value="Other">Other</option></select>
+        </div>
+        <label for="authEmail">Email address</label><input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com" required>
+        <label for="authPassword">Password</label><input id="authPassword" type="password" autocomplete="current-password" minlength="6" placeholder="At least 6 characters" required>
+        <button class="btn primary full" id="authSubmit" type="submit">Sign in</button>
+      </form>
+      <p id="authMessage" class="message" role="status"></p>
+      <p class="fine-print">Your records are private to your account. Configure your Supabase project before signing in.</p>
+    </section>
+  </div>
+
+  <main id="appView" class="app hidden">
+    <header class="topbar">
+      <div class="brand-mark">N</div><div><p class="eyebrow">NABENG • PERSONAL FINANCE</p><h1>Income Dashboard</h1></div>
+      <div class="top-actions"><span class="cloud-status" id="cloudStatus"><i></i> Connecting…</span><button id="profileBtn" class="btn outline small">My profile</button><button id="signOutBtn" class="btn outline small">Sign out</button></div>
+    </header>
+
+    <section id="profilePage" class="panel profile-page hidden">
+      <div class="panel-heading"><div><p class="eyebrow">YOUR ACCOUNT</p><h3>Edit your profile</h3><p class="muted small-text">Keep your personal details up to date.</p></div><button type="button" id="backDashboardBtn" class="btn outline">Back to dashboard</button></div>
+      <form id="profileForm" class="profile-form">
+        <div class="profile-avatar" id="profileAvatar">N</div>
+        <div class="profile-field-grid">
+          <div><label for="profileFirstName">First name</label><input id="profileFirstName" type="text" autocomplete="given-name" required maxlength="80"></div>
+          <div><label for="profileSurname">Surname</label><input id="profileSurname" type="text" autocomplete="family-name" required maxlength="80"></div>
+          <div><label for="profileDob">Date of birth</label><input id="profileDob" type="date" autocomplete="bday" required></div>
+          <div><label for="profileGender">Gender</label><select id="profileGender" required><option value="">Select gender</option><option value="Female">Female</option><option value="Male">Male</option><option value="Prefer not to say">Prefer not to say</option><option value="Other">Other</option></select></div>
+          <div class="profile-full"><label for="profileEmail">Email address</label><input id="profileEmail" type="email" disabled><p class="muted tiny">Email is managed by your sign-in account.</p></div>
+        </div>
+        <button class="btn primary" type="submit" id="saveProfileBtn">Save profile changes</button>
+      </form>
+      <p id="profileMessage" class="message" role="status"></p>
+    </section>
+    <div id="dashboardContent">
+    <section class="welcome-row"><div><p class="eyebrow">YOUR FINANCIAL OVERVIEW</p><h2>Good to see you<span id="userGreeting"></span>.</h2><p class="muted">Plan your income, monitor your allocation, and keep your financial priorities in view.</p></div><div class="date-chip" id="todayLabel"></div></section>
+
+    <section class="metric-grid">
+      <article class="metric-card dark"><div class="metric-icon">₵</div><p>Total income entered</p><h3 id="metricIncome">GH₵0.00</h3><small>Income in this calculation</small></article>
+      <article class="metric-card"><div class="metric-icon green">↗</div><p>Business funds</p><h3 id="metricBusiness">GH₵0.00</h3><small>Reinvestment + business savings</small></article>
+      <article class="metric-card"><div class="metric-icon blue">◫</div><p>Personal savings</p><h3 id="metricSavings">GH₵0.00</h3><small>Dedicated savings allocation</small></article>
+      <article class="metric-card"><div class="metric-icon amber">%</div><p>Allocation total</p><h3 id="metricPercent">110%</h3><small id="metricPercentNote">Check your allocation settings</small></article>
+    </section>
+
+    <section id="percentageWarning" class="warning-banner" role="alert">
+      <div class="warning-symbol">!</div><div><strong>Your allocations exceed 100%</strong><p>Your current categories total 110%, which is 10% over your income. The app keeps your percentages unchanged and shows the over-allocation clearly.</p></div>
+    </section>
+
+    <section class="main-grid">
+      <div class="panel income-panel">
+        <div class="panel-heading"><div><p class="eyebrow">NEW CALCULATION</p><h3>Enter your income</h3><p class="muted small-text">Amounts are in Ghana cedis (GH₵).</p></div><span class="panel-icon">＋</span></div>
+        <form id="incomeForm">
+          <label for="incomeInput">Total income received</label><div class="money-input"><span>GH₵</span><input id="incomeInput" type="number" min="0.01" step="0.01" placeholder="0.00" inputmode="decimal" required></div>
+          <div class="quick-amounts"><button type="button" data-amount="500">₵500</button><button type="button" data-amount="1000">₵1,000</button><button type="button" data-amount="2000">₵2,000</button><button type="button" data-amount="5000">₵5,000</button></div>
+          <label for="incomeNote">Note <span class="optional">(optional)</span></label><input id="incomeNote" type="text" maxlength="120" placeholder="e.g. October salary, print job">
+          <button class="btn primary full" type="submit" id="saveIncomeBtn">Calculate and save to cloud</button>
+        </form>
+        <p class="message" id="incomeMessage" role="status"></p>
+      </div>
+      <div class="panel overview-panel">
+        <div class="panel-heading"><div><p class="eyebrow">AT A GLANCE</p><h3>Allocation overview</h3><p class="muted small-text">Based on the latest income amount.</p></div></div>
+        <div class="overview-total"><span>Income amount</span><strong id="overviewIncome">GH₵0.00</strong></div>
+        <div class="overview-total"><span>Planned across categories</span><strong id="overviewAllocated">GH₵0.00</strong></div>
+        <div class="overview-total"><span>Over allocation</span><strong class="danger-text" id="overviewOver">GH₵0.00</strong></div>
+        <div class="mini-bar"><span id="overviewBar"></span></div><p class="muted tiny" id="overviewHint">Enter income to preview your plan.</p>
+        <div class="overview-actions"><button id="copyBtn" class="btn outline">Copy breakdown</button><button id="printBtn" class="btn outline">Print / Save PDF</button></div>
+      </div>
+    </section>
+
+    <section class="section-heading"><div><p class="eyebrow">YOUR MONEY PLAN</p><h3>Allocation categories</h3><p class="muted small-text">Percentages remain as you set them; the total is checked automatically.</p></div><button id="editAllocBtn" class="btn outline">Edit percentages</button></section>
+    <section class="allocation-grid" id="allocationGrid"></section>
+
+    <section class="panel allocation-editor hidden" id="allocationEditor">
+      <div class="panel-heading"><div><p class="eyebrow">CUSTOMIZE YOUR PLAN</p><h3>Allocation percentages</h3><p class="muted small-text">Changes save to your account when you press Save percentages.</p></div><button type="button" class="icon-button" id="closeEditorBtn" aria-label="Close">×</button></div>
+      <form id="allocationForm"><div id="allocationFields" class="allocation-fields"></div><div class="editor-total"><span>Total percentage</span><strong id="editorTotal">110%</strong></div><p id="editorWarning" class="warning-inline">The total is above 100%.</p><button class="btn primary" type="submit">Save percentages to cloud</button></form>
+      <p id="allocationMessage" class="message" role="status"></p>
+    </section>
+
+    <section class="panel history-panel">
+      <div class="panel-heading history-heading"><div><p class="eyebrow">CLOUD HISTORY</p><h3>Recent income calculations</h3><p class="muted small-text">Your saved records follow you when you sign in on another device.</p></div><button id="refreshBtn" class="btn outline small">Refresh</button></div>
+      <div class="table-wrap"><table><thead><tr><th>Date</th><th>Note</th><th>Income</th><th>Allocated</th><th>Status</th><th></th></tr></thead><tbody id="historyBody"><tr><td colspan="6" class="empty-row">Sign in and save an income amount to begin.</td></tr></tbody></table></div>
+      <p id="historyMessage" class="message" role="status"></p>
+    </section>
+    <footer>Nabeng Income Dashboard <span>•</span> Give every cedi a purpose.</footer>
+    </div>
+  </main>
+  
+  <script>
+  /* Nabeng Income Dashboard
+   Add your Supabase Project URL and anon/public key below.
+   Never put a Supabase service_role key in browser code. */
+const SUPABASE_URL = "https://vbtppozknezdierutirp.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZidHBwb3prbmV6ZGllcnV0aXJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA3MzY3NjQsImV4cCI6MjEwNjMxMjc2NH0.0eCglmdxpPwkok6A52D03TuHBbE4bZD92n9kFZ4o_t8";
+
+const DEFAULT_ALLOCATIONS = [
+  {key:"reinvest",name:"Business Reinvestment",percent:15,icon:"↗",desc:"Put money back into growing your business.",className:"reinvest"},
+  {key:"business_savings",name:"Business Savings",percent:15,icon:"▣",desc:"Build a reserve for business opportunities.",className:"business-savings"},
+  {key:"personal",name:"Personal Needs",percent:30,icon:"♡",desc:"Cover essential personal and household costs.",className:"personal"},
+  {key:"fun",name:"Fun",percent:10,icon:"✧",desc:"Enjoy life while keeping spending planned.",className:"fun"},
+  {key:"savings",name:"Savings",percent:20,icon:"◫",desc:"Grow your personal savings and safety net.",className:"savings"},
+  {key:"others",name:"Others",percent:10,icon:"◇",desc:"Set aside funds for other priorities and extras.",className:"others"},
+  {key:"maintenance",name:"Maintenance",percent:10,icon:"⚙",desc:"Prepare for repairs, upkeep, and replacements.",className:"maintenance"}
+];
+const $ = id => document.getElementById(id);
+const money = new Intl.NumberFormat("en-GH",{style:"currency",currency:"GHS",minimumFractionDigits:2,maximumFractionDigits:2});
+const fmt = value => money.format(Number(value)||0).replace("GHS","GH₵");
+let supabaseClient = null;
+let isSignUp = false;
+let currentUser = null;
+let allocations = DEFAULT_ALLOCATIONS.map(x=>({...x}));
+let currentIncome = 0;
+let incomeHistory = [];
+let userProfile = {first_name:"",surname:"",date_of_birth:"",gender:""};
+
+function setMessage(id,text,error=false){const el=$(id);el.textContent=text;el.classList.toggle("error",!!error)}
+function totalPercent(list=allocations){return list.reduce((sum,item)=>sum+Number(item.percent||0),0)}
+function showAuth(){ $("authView").classList.remove("hidden");$("appView").classList.add("hidden")}
+function showApp(){ $("authView").classList.add("hidden");$("appView").classList.remove("hidden")}
+function setCloudStatus(text,offline=false){$("cloudStatus").textContent=text;$("cloudStatus").classList.toggle("offline",offline);const dot=document.createElement("i");$("cloudStatus").prepend(dot)}
+function initSupabase(){
+  if(!window.supabase){setMessage("authMessage","Could not load the Supabase client. Check your internet connection.",true);return false}
+  if(SUPABASE_URL.startsWith("YOUR_")||SUPABASE_ANON_KEY.startsWith("YOUR_")){
+    setMessage("authMessage","Setup required: add your Supabase project URL and anon/public key in script.js.",true);
+    setCloudStatus("Setup required",true);return false;
+  }
+  try{supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);return true}
+  catch(error){setMessage("authMessage","Supabase setup error: "+error.message,true);return false}
+}
+function renderAllocations(){
+  const grid=$("allocationGrid");grid.replaceChildren();
+  allocations.forEach(item=>{
+    const card=document.createElement("article");card.className="allocation-card "+item.className;
+    const top=document.createElement("div");top.className="alloc-top";
+    const icon=document.createElement("div");icon.className="alloc-icon";icon.textContent=item.icon;
+    const pct=document.createElement("span");pct.className="alloc-percent";pct.textContent=`${Number(item.percent)}%`;
+    top.append(icon,pct);
+    const name=document.createElement("h4");name.className="alloc-name";name.textContent=item.name;
+    const desc=document.createElement("p");desc.className="alloc-desc";desc.textContent=item.desc;
+    const amount=document.createElement("h3");amount.className="alloc-amount";amount.id=`amount-${item.key}`;amount.textContent=fmt(currentIncome*Number(item.percent)/100);
+    const track=document.createElement("div");track.className="alloc-track";const fill=document.createElement("div");fill.className="alloc-fill";fill.id=`bar-${item.key}`;fill.style.width=`${Math.min(Number(item.percent)||0,100)}%`;track.append(fill);
+    const foot=document.createElement("div");foot.className="alloc-foot";const purpose=document.createElement("span");purpose.textContent=item.key==="reinvest"?"Growth fund":item.key==="business_savings"?"Business reserve":item.key==="personal"?"Essentials":item.key==="fun"?"Lifestyle":item.key==="savings"?"Future you":item.key==="others"?"Other priorities":"Upkeep fund";const percentLabel=document.createElement("span");percentLabel.textContent=`${item.percent}% of income`;foot.append(purpose,percentLabel);
+    card.append(top,name,desc,amount,track,foot);grid.append(card);
+  });
+  renderAllocationFields();updateDashboard();
+}
+function renderAllocationFields(){
+  const container=$("allocationFields");container.replaceChildren();
+  allocations.forEach(item=>{
+    const wrap=document.createElement("div");wrap.className="field";
+    const label=document.createElement("label");label.htmlFor=`percent-${item.key}`;label.textContent=item.name;
+    const input=document.createElement("input");input.id=`percent-${item.key}`;input.type="number";input.min="0";input.max="1000";input.step="0.1";input.required=true;input.value=Number(item.percent);
+    input.addEventListener("input",()=>{const value=Number(input.value);if(Number.isFinite(value)&&value>=0){const copy=allocations.map(x=>({...x}));copy.find(x=>x.key===item.key).percent=value;$("editorTotal").textContent=`${totalPercent(copy).toFixed(1).replace(/\.0$/,"")}%`;$("editorWarning").textContent=totalPercent(copy)>100?"Warning: total exceeds 100%. These percentages will be kept as entered.":totalPercent(copy)<100?"Note: total is below 100%; some income will remain unallocated.":"Your percentages total exactly 100%.";}});wrap.append(label,input);container.append(wrap);
+  });
+  $("editorTotal").textContent=`${totalPercent()}%`;updateEditorWarning();
+}
+function updateEditorWarning(){const total=totalPercent();$("editorTotal").textContent=`${Number(total.toFixed(2))}%`;$("editorWarning").textContent=total>100?"Warning: total exceeds 100%. These percentages will be kept as entered.":total<100?"Note: total is below 100%; some income will remain unallocated.":"Your percentages total exactly 100%."}
+function updateDashboard(){
+  const total=totalPercent();const amount=currentIncome;const allocated=amount*total/100;const over=Math.max(0,allocated-amount);
+  $("metricIncome").textContent=fmt(amount);$("metricBusiness").textContent=fmt(amount*((Number(allocations.find(x=>x.key==="reinvest")?.percent)||0)+(Number(allocations.find(x=>x.key==="business_savings")?.percent)||0))/100);
+  $("metricSavings").textContent=fmt(amount*(Number(allocations.find(x=>x.key==="savings")?.percent)||0)/100);
+  $("metricPercent").textContent=`${Number(total.toFixed(2))}%`;
+  $("metricPercentNote").textContent=total>100?`${(total-100).toFixed(1).replace(/\.0$/,"")}% above your income`:total<100?`${(100-total).toFixed(1).replace(/\.0$/,"")}% not allocated`:"Balanced at 100%";
+  $("percentageWarning").classList.toggle("hidden",total<=100);
+  if(total>100){$("percentageWarning").querySelector("strong").textContent=`Your allocations exceed 100% (${Number(total.toFixed(2))}%)`;$("percentageWarning").querySelector("p").textContent=`Your categories total ${Number(total.toFixed(2))}%, which is ${(total-100).toFixed(2)}% over your income. The app keeps your percentages unchanged and shows the over-allocation clearly.`}
+  $("overviewIncome").textContent=fmt(amount);$("overviewAllocated").textContent=fmt(allocated);$("overviewOver").textContent=fmt(over);
+  $("overviewBar").style.width=`${Math.min(total,100)}%`;
+  $("overviewHint").textContent=amount>0?(total>100?`Your plan assigns ${fmt(allocated)} from ${fmt(amount)} of income.`:total<100?`${fmt(amount-allocated)} remains unallocated.`:"Your plan allocates all entered income."):"Enter income to preview your plan.";
+  allocations.forEach(item=>{const amountEl=$(`amount-${item.key}`);const barEl=$(`bar-${item.key}`);if(amountEl)amountEl.textContent=fmt(amount*Number(item.percent)/100);if(barEl)barEl.style.width=`${Math.min(Number(item.percent)||0,100)}%`});
+}
+function getBreakdownText(amount=currentIncome){
+ const lines=["NABENG INCOME BREAKDOWN",`Date: ${new Date().toLocaleDateString("en-GB")}`,`Total income: ${fmt(amount)}`,"",...allocations.map(item=>`${item.name} (${item.percent}%): ${fmt(amount*Number(item.percent)/100)}`),"",`Total percentage: ${Number(totalPercent().toFixed(2))}%`,`Total allocated: ${fmt(amount*totalPercent()/100)}`,`Over allocation: ${fmt(Math.max(0,amount*(totalPercent()-100)/100))}`];
+ return lines.join("\n");
+}
+async function loadProfileAndData(){
+  setCloudStatus("Syncing…");
+  try{
+    const {data:profile,error:profileError}=await supabaseClient.from("income_splitter_profiles").select("allocations,first_name,surname,date_of_birth,gender").eq("user_id",currentUser.id).maybeSingle();
+    if(profileError)throw profileError;
+    if(profile?.allocations&&Array.isArray(profile.allocations)){
+      allocations=DEFAULT_ALLOCATIONS.map(def=>{const saved=profile.allocations.find(x=>x.key===def.key);return saved?{...def,percent:Number(saved.percent)}:{...def}});
+    }
+    const meta=currentUser.user_metadata||{};
+    userProfile={first_name:profile?.first_name||meta.first_name||"",surname:profile?.surname||meta.surname||"",date_of_birth:profile?.date_of_birth||meta.date_of_birth||"",gender:profile?.gender||meta.gender||""};
+    fillProfileForm();
+    const fullName=[userProfile.first_name,userProfile.surname].filter(Boolean).join(" ");
+    $("userGreeting").textContent=fullName?`, ${fullName}`:(currentUser.email?`, ${currentUser.email.split("@")[0]}`:"");
+    await saveProfile();
+    $("todayLabel").textContent=new Date().toLocaleDateString("en-GH",{weekday:"short",day:"numeric",month:"short",year:"numeric"});
+    renderAllocations();
+    await loadHistory();
+    setCloudStatus("Cloud synced");
+  }catch(error){
+    setCloudStatus("Sync issue",true);
+    setMessage("incomeMessage",`Could not load your cloud profile. Check that you ran supabase.sql. ${error.message||""}`,true);
+  }
+}
+function fillProfileForm(){
+  $("profileFirstName").value=userProfile.first_name||"";
+  $("profileSurname").value=userProfile.surname||"";
+  $("profileDob").value=userProfile.date_of_birth||"";
+  $("profileGender").value=userProfile.gender||"";
+  $("profileEmail").value=currentUser?.email||"";
+  $("profileAvatar").textContent=(userProfile.first_name||userProfile.surname||"N").trim().charAt(0).toUpperCase();
+}
+async function saveProfile(){
+  const payload={user_id:currentUser.id,first_name:userProfile.first_name||null,surname:userProfile.surname||null,date_of_birth:userProfile.date_of_birth||null,gender:userProfile.gender||null,allocations:allocations.map(x=>({key:x.key,percent:Number(x.percent)})),updated_at:new Date().toISOString()};
+  const {error}=await supabaseClient.from("income_splitter_profiles").upsert(payload,{onConflict:"user_id"});
+  if(error)throw error;
+}
+async function loadHistory(){
+  const {data,error}=await supabaseClient.from("income_splitter_records").select("id,income_amount,note,created_at,allocation_percent,allocated_amount").eq("user_id",currentUser.id).order("created_at",{ascending:false}).limit(20);
+  if(error)throw error;
+  incomeHistory=data||[];renderHistory();
+}
+function renderHistory(){
+  const body=$("historyBody");body.replaceChildren();
+  if(!incomeHistory.length){const row=document.createElement("tr"),cell=document.createElement("td");cell.colSpan=6;cell.className="empty-row";cell.textContent="No cloud records yet. Enter your income above to create your first calculation.";row.append(cell);body.append(row);return}
+  incomeHistory.forEach(record=>{
+    const row=document.createElement("tr");
+    const date=document.createElement("td");date.textContent=new Date(record.created_at).toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"});
+    const note=document.createElement("td");note.textContent=record.note||"Income calculation";
+    const income=document.createElement("td");income.className="money";income.textContent=fmt(record.income_amount);
+    const allocated=document.createElement("td");allocated.className="money";allocated.textContent=fmt(record.allocated_amount);
+    const status=document.createElement("td");const pill=document.createElement("span");pill.className="status-pill"+(Number(record.allocation_percent)>100?" warning":"");pill.textContent=Number(record.allocation_percent)>100?`${Number(record.allocation_percent)}% · Over 100%`:`${Number(record.allocation_percent)}%`;status.append(pill);
+    const action=document.createElement("td");const load=document.createElement("button");load.className="row-action";load.textContent="Load";load.addEventListener("click",()=>{currentIncome=Number(record.income_amount);$("incomeInput").value=currentIncome;$("incomeNote").value=record.note||"";updateDashboard();window.scrollTo({top:0,behavior:"smooth"})});action.append(load);
+    row.append(date,note,income,allocated,status,action);body.append(row);
+  });
+}
+async function saveIncome(event){
+ event.preventDefault();const amount=Number($("incomeInput").value);
+ if(!Number.isFinite(amount)||amount<=0){setMessage("incomeMessage","Enter an income amount greater than zero.",true);return}
+ $("saveIncomeBtn").disabled=true;$("saveIncomeBtn").textContent="Saving to cloud…";
+ try{
+  currentIncome=amount;updateDashboard();
+  const percent=Number(totalPercent().toFixed(2));const allocated=amount*percent/100;
+  const {error}=await supabaseClient.from("income_splitter_records").insert({user_id:currentUser.id,income_amount:amount,note:$("incomeNote").value.trim()||null,allocation_percent:percent,allocated_amount:allocated,allocation_snapshot:allocations.map(x=>({key:x.key,name:x.name,percent:Number(x.percent),amount:amount*Number(x.percent)/100}))});
+  if(error)throw error;
+  await loadHistory();setMessage("incomeMessage",percent>100?`Saved. Note: your allocation is ${percent}% and exceeds 100%.`:"Income calculation saved securely to your account.");setCloudStatus("Cloud synced");
+ }catch(error){setMessage("incomeMessage",`Could not save to cloud: ${error.message||error}. Check the SQL setup and RLS policies.`,true);setCloudStatus("Save failed",true)}
+ finally{$("saveIncomeBtn").disabled=false;$("saveIncomeBtn").textContent="Calculate and save to cloud"}
+}
+async function submitAuth(event){
+ event.preventDefault();if(!supabaseClient&&!initSupabase())return;
+ const email=$("authEmail").value.trim(),password=$("authPassword").value;
+ $("authSubmit").disabled=true;$("authSubmit").textContent=isSignUp?"Creating account…":"Signing in…";setMessage("authMessage","");
+ try{
+  if(isSignUp){
+   const firstName=$("authFirstName").value.trim(),surname=$("authSurname").value.trim(),dateOfBirth=$("authDob").value,gender=$("authGender").value;
+   if(!firstName||!surname||!dateOfBirth||!gender){setMessage("authMessage","Please complete your first name, surname, date of birth, and gender.",true);return}
+   if(new Date(dateOfBirth)>new Date()){setMessage("authMessage","Date of birth cannot be in the future.",true);return}
+   const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{first_name:firstName,surname,date_of_birth:dateOfBirth,gender,full_name:`${firstName} ${surname}`}}});
+   if(error)throw error;
+   if(data.session){currentUser=data.user;userProfile={first_name:firstName,surname,date_of_birth:dateOfBirth,gender};showApp();await loadProfileAndData()}
+   else setMessage("authMessage","Account created. Check your email to confirm the account, then sign in.");
+  }else{
+   const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});if(error)throw error;
+   currentUser=data.user;showApp();await loadProfileAndData();
+  }
+ }catch(error){setMessage("authMessage",error.message||"Authentication failed.",true)}
+ finally{$("authSubmit").disabled=false;$("authSubmit").textContent=isSignUp?"Create account":"Sign in"}
+}
+function setAuthMode(signUp){isSignUp=signUp;$("signInTab").classList.toggle("active",!signUp);$("signUpTab").classList.toggle("active",signUp);$("signUpFields").classList.toggle("hidden",!signUp);["authFirstName","authSurname","authDob","authGender"].forEach(id=>$(id).required=signUp);$("authSubmit").textContent=signUp?"Create account":"Sign in";$("authPassword").autocomplete=signUp?"new-password":"current-password";setMessage("authMessage","")}
+async function startApp(){
+ $("signInTab").addEventListener("click",()=>setAuthMode(false));$("signUpTab").addEventListener("click",()=>setAuthMode(true));$("authForm").addEventListener("submit",submitAuth);
+ if(!initSupabase())return;
+ setAuthMode(false);
+ const {data:{session}}=await supabaseClient.auth.getSession();
+ if(session){currentUser=session.user;showApp();await loadProfileAndData()}else showAuth();
+ supabaseClient.auth.onAuthStateChange((_event,session)=>{if(!session){currentUser=null;showAuth()}});
+ $("incomeForm").addEventListener("submit",saveIncome);
+ $("profileBtn").addEventListener("click",()=>{fillProfileForm();$("dashboardContent").classList.add("hidden");$("profilePage").classList.remove("hidden");window.scrollTo({top:0,behavior:"smooth"})});
+ $("backDashboardBtn").addEventListener("click",()=>{$("profilePage").classList.add("hidden");$("dashboardContent").classList.remove("hidden")});
+ $("profileForm").addEventListener("submit",async event=>{
+   event.preventDefault();
+   const next={first_name:$("profileFirstName").value.trim(),surname:$("profileSurname").value.trim(),date_of_birth:$("profileDob").value,gender:$("profileGender").value};
+   if(!next.first_name||!next.surname||!next.date_of_birth||!next.gender){setMessage("profileMessage","Please complete all profile fields.",true);return}
+   if(new Date(next.date_of_birth)>new Date()){setMessage("profileMessage","Date of birth cannot be in the future.",true);return}
+   const button=$("saveProfileBtn");button.disabled=true;button.textContent="Saving…";
+   const old={...userProfile};userProfile=next;
+   try{
+     const {error:authError}=await supabaseClient.auth.updateUser({data:{first_name:next.first_name,surname:next.surname,date_of_birth:next.date_of_birth,gender:next.gender,full_name:`${next.first_name} ${next.surname}`}});if(authError)throw authError;
+     await saveProfile();$("userGreeting").textContent=`, ${next.first_name} ${next.surname}`;fillProfileForm();setMessage("profileMessage","Your profile has been updated successfully.");
+   }catch(error){userProfile=old;fillProfileForm();setMessage("profileMessage",`Could not save profile: ${error.message||error}. Check that you ran the updated supabase.sql.`,true)}
+   finally{button.disabled=false;button.textContent="Save profile changes"}
+ });
+ document.querySelectorAll("[data-amount]").forEach(button=>button.addEventListener("click",()=>{$("incomeInput").value=button.dataset.amount;currentIncome=Number(button.dataset.amount);updateDashboard()}));
+ $("editAllocBtn").addEventListener("click",()=>{$("allocationEditor").classList.toggle("hidden");renderAllocationFields();$("allocationEditor").scrollIntoView({behavior:"smooth",block:"start"})});
+ $("closeEditorBtn").addEventListener("click",()=>$("allocationEditor").classList.add("hidden"));
+ $("allocationForm").addEventListener("submit",async event=>{
+  event.preventDefault();const next=allocations.map(item=>({...item,percent:Number($(`percent-${item.key}`).value)}));
+  if(next.some(x=>!Number.isFinite(x.percent)||x.percent<0)){setMessage("allocationMessage","Enter valid percentages of zero or more.",true);return}
+  const old=allocations;allocations=next;updateDashboard();renderAllocations();
+  try{await saveProfile();setMessage("allocationMessage",`Percentages saved. Total: ${Number(totalPercent().toFixed(2))}%.`);setCloudStatus("Cloud synced")}
+  catch(error){allocations=old;renderAllocations();setMessage("allocationMessage",`Could not save percentages: ${error.message||error}`,true);setCloudStatus("Save failed",true)}
+ });
+ $("copyBtn").addEventListener("click",async()=>{if(currentIncome<=0){setMessage("incomeMessage","Enter an income amount first.",true);$("incomeInput").focus();return}try{await navigator.clipboard.writeText(getBreakdownText());setMessage("incomeMessage","Breakdown copied to clipboard.")}catch{setMessage("incomeMessage","Clipboard access was blocked. Use Print / Save PDF instead.",true)}});
+ $("printBtn").addEventListener("click",()=>{if(currentIncome<=0){setMessage("incomeMessage","Enter an income amount before printing.",true);$("incomeInput").focus();return}window.print()});
+ $("refreshBtn").addEventListener("click",async()=>{try{await loadHistory();setMessage("historyMessage","History refreshed.")}catch(error){setMessage("historyMessage",error.message||"Could not refresh history.",true)}});
+ $("signOutBtn").addEventListener("click",async()=>{if(supabaseClient)await supabaseClient.auth.signOut();currentUser=null;showAuth()});
+ $("todayLabel").textContent=new Date().toLocaleDateString("en-GH",{weekday:"short",day:"numeric",month:"short",year:"numeric"});
+ renderAllocations();
+}
+document.addEventListener("DOMContentLoaded",startApp);
+
+  </script>
+</body>
+</html>
