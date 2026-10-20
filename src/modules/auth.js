@@ -23,13 +23,39 @@ function niOpenAuth(mode='signin'){
 function niOpenLanding(){ NI.niHide('authScreen');NI.niHide('dashboardScreen');NI.niHide('invoiceApp');NI.niHide('editorBar');NI.niShow('landingScreen'); }
 function niOpenDashboard(){ NI.niHide('landingScreen');NI.niHide('authScreen');NI.niHide('invoiceApp');NI.niHide('editorBar');NI.niShow('dashboardScreen'); }
 
-async function niEnsureProfile(user){
-  const {data,error}=await NI.state.niSupabase.from('invoice_profiles').select('*').eq('user_id',user.id).maybeSingle();
-  if(error){ console.error(error); throw error; }
-  if(data) return data;
-  const fallback={user_id:user.id,full_name:user.user_metadata?.full_name||'',business_name:'',business_email:user.email||'',business_phone:'',business_address:'',logo_url:'',signature_url:''};
-  const {data:created,error:createError}=await NI.state.niSupabase.from('invoice_profiles').insert(fallback).select().single();
-  if(createError) throw createError;
+async function niEnsureProfile(user) {
+  const { data, error } = await NI.state.niSupabase
+    .from("invoice_profiles")
+    .select("*")
+    .eq("user_id", user.id)
+    .maybeSingle();
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+  if (data) return data;
+
+  const trialEnds = new Date();
+  trialEnds.setDate(trialEnds.getDate() + 30);
+
+  const fallback = {
+    user_id: user.id,
+    full_name: user.user_metadata?.full_name || "",
+    business_name: "",
+    business_email: user.email || "",
+    business_phone: "",
+    business_address: "",
+    logo_url: "",
+    signature_url: "",
+    trial_ends_at: trialEnds.toISOString(),
+    subscription_status: "trial",
+  };
+  const { data: created, error: createError } = await NI.state.niSupabase
+    .from("invoice_profiles")
+    .insert(fallback)
+    .select()
+    .single();
+  if (createError) throw createError;
   return created;
 }
 
@@ -51,6 +77,14 @@ async function niLoadUser(user){
   NI.niSetLogoPreview(NI.state.niProfileLogoDataUrl);
   NI.niSetSignaturePreview(NI.state.niProfileSignatureDataUrl);
   NI.niApplySignatureToEditor(NI.state.niProfileSignatureDataUrl);
+  
+  // --- subscription gate ---
+  const allowed = await NI.niCheckAccessAndRoute();
+  if (!allowed) return; // locked screen is already showing
+
+  // original UI population continues…
+  NI.$("dashUserName").textContent = NI.state.niProfile.full_name || user.email || "User";
+  
   await NI.niLoadCustomers();
   await NI.niLoadInvoiceHistory();
   NI.niOpenDashboard();

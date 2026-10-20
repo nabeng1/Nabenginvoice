@@ -128,6 +128,21 @@ function niWire(){
     NI.niSetSignaturePreview('');
     NI.niApplySignatureToEditor('');
   });
+  
+  onClick("newInvoiceBtn", async () => {
+  const ok = await NI.niCheckAccessAndRoute();
+  if (!ok) return;
+});
+onClick("dashboardInvoiceBtn", async () => {
+  const ok = await NI.niCheckAccessAndRoute();
+  if (!ok) return;
+  NI.niNewInvoice();
+  NI.niOpenEditor();
+});
+
+onClick("payMonthlyBtn", () => NI.niStartPaystackPayment("monthly"));
+onClick("payYearlyBtn",  () => NI.niStartPaystackPayment("yearly"));
+onClick("subLockSignOut", NI.niSignOut);
 }
 
 Object.assign(NI, {

@@ -11,6 +11,7 @@ import "./modules/phase4.js";
 import "./modules/editor.js";
 import "./modules/wire.js";
 import "./components/header.js";
+import "./modules/subscription.js";
 
 window.addEventListener("DOMContentLoaded", () => {
   NI.niRefreshBrandLogos();
