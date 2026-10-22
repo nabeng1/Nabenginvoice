@@ -13,8 +13,18 @@
 <!-- ============ NABENG INVOICE PLATFORM ============ -->
 <section class="ni-screen ni-landing" id="landingScreen">
 <nav class="ni-nav">
-<div class="ni-logo"><img class="ni-brand-logo" data-ni-brand-logo src="/assets/nabeng-invoice-logo.png" alt="Nabeng Invoice logo"><span>Nabeng Invoice</span></div>
-<div class="ni-nav-actions"><button class="ni-btn ni-btn-outline" id="landingSignIn">Sign In</button><button class="ni-btn ni-btn-primary" id="landingSignUp">Create Account</button></div>
+  <div class="ni-logo">
+    <img class="ni-brand-logo" data-ni-brand-logo src="/assets/nabeng-invoice-logo.png" alt="Nabeng Invoice logo">
+    <span>Nabeng Invoice</span>
+  </div>
+  <div class="ni-nav-links">
+    <button class="ni-nav-link" id="navAbout">About</button>
+    <button class="ni-nav-link" id="navContact">Contact</button>
+  </div>
+  <div class="ni-nav-actions">
+    <button class="ni-btn ni-btn-outline" id="landingSignIn">Sign In</button>
+    <button class="ni-btn ni-btn-primary" id="landingSignUp">Create Account</button>
+  </div>
 </nav>
 <div class="ni-hero">
 <div>
@@ -27,23 +37,103 @@
 <div class="ni-mock"><div class="ni-mock-top"><span class="ni-inline-brand"><img data-ni-brand-logo src="/assets/nabeng-invoice-logo.png" alt="Nabeng Invoice logo"><strong>Nabeng Invoice</strong></span><span style="margin-left:auto;font-size:10px;color:#94a3b8">PREVIEW</span></div><div class="ni-mock-sheet"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px"><div><div style="font-weight:900;font-size:18px">Your Business</div><div style="font-size:10px;color:#64748b">Professional invoice</div></div><div style="width:45px;height:45px;border-radius:10px;background:#eff6ff"></div></div><div class="ni-mock-band">INVOICE</div><div class="ni-lines"><div class="ni-line"></div><div class="ni-line mid"></div><div class="ni-line short"></div><div class="ni-line"></div><div class="ni-line mid"></div></div><div style="display:flex;justify-content:flex-end;margin-top:25px"><div style="width:150px;height:38px;border-radius:8px;background:#eff6ff"></div></div></div></div>
 </div>
 </section>
+
+
+
+<!-- AUTH SCREEN -->
 <section class="ni-screen ni-hidden" id="authScreen">
-<div class="ni-auth-wrap">
-<div class="ni-auth-side"><div class="ni-logo"><img class="ni-brand-logo" data-ni-brand-logo src="/assets/nabeng-invoice-logo.png" alt="Nabeng Invoice logo"><span>Nabeng Invoice</span></div><h2>Your invoices. Your business. Your workspace.</h2><p>Sign in to access your saved business information and create invoices without entering the same details every time.</p></div>
-<div class="ni-auth-card-wrap"><div class="ni-auth-card">
-<h3 id="authTitle">Welcome to Nabeng Invoice</h3><p class="sub" id="authSubtitle">Create an account or sign in to continue.</p>
-<div class="ni-auth-tabs"><button class="ni-auth-tab active" id="tabSignIn">Sign In</button><button class="ni-auth-tab" id="tabSignUp">Sign Up</button></div>
-<form id="authForm">
-<div class="ni-field ni-signup-only ni-hidden"><label>Full name</label><input autocomplete="name" id="authName" placeholder="Your full name" type="text"/></div>
-<div class="ni-field"><label>Email address</label><input autocomplete="email" id="authEmail" placeholder="you@example.com" required="" type="email"/></div>
-<div class="ni-field"><label>Password</label><input autocomplete="current-password" id="authPassword" minlength="6" placeholder="••••••••" required="" type="password"/></div>
-<button class="ni-btn ni-btn-primary ni-auth-submit" id="authSubmit" type="submit">Sign In</button>
-</form>
-<div class="ni-msg" id="authMsg"></div>
-<button class="ni-back" id="backToLanding">← Back to Nabeng Invoice</button>
-</div></div>
-</div>
+  <div class="ni-auth-wrap">
+    <div class="ni-auth-side">
+      <div class="ni-logo">
+        <img class="ni-brand-logo" data-ni-brand-logo src="/assets/nabeng-invoice-logo.png" alt="Nabeng Invoice logo">
+        <span>Nabeng Invoice</span>
+      </div>
+      <h2>Your invoices. Your business. Your workspace.</h2>
+      <p>Sign in to access your saved business information and create invoices without entering the same details every time.</p>
+    </div>
+
+    <div class="ni-auth-card-wrap">
+      <div class="ni-auth-card">
+        <h3 id="authTitle">Welcome to Nabeng Invoice</h3>
+        <p class="sub" id="authSubtitle">Create an account or sign in to continue.</p>
+
+        <!-- Tabs (only shown in signin/signup mode) -->
+        <div class="ni-auth-tabs" id="authTabs">
+          <button class="ni-auth-tab active" id="tabSignIn">Sign In</button>
+          <button class="ni-auth-tab" id="tabSignUp">Sign Up</button>
+        </div>
+
+        <!-- MAIN AUTH FORM (signin / signup / forgot) -->
+        <form id="authForm">
+          <div class="ni-field ni-signup-only ni-hidden">
+            <label>Full name</label>
+            <input autocomplete="name" id="authName" placeholder="Your full name" type="text"/>
+          </div>
+
+          <div class="ni-field" id="authEmailField">
+            <label>Email address</label>
+            <input autocomplete="email" id="authEmail" placeholder="you@example.com" required type="email"/>
+          </div>
+
+          <div class="ni-field" id="authPasswordField">
+            <label>Password</label>
+            <input autocomplete="current-password" id="authPassword" minlength="6" placeholder="••••••••" required type="password"/>
+          </div>
+
+          <button class="ni-btn ni-btn-primary ni-auth-submit" id="authSubmit" type="submit">Sign In</button>
+        </form>
+
+        <!-- Forgot password link (only on Sign In) -->
+        <div id="forgotPasswordLinkWrap" style="text-align:right; margin-top:10px;">
+          <button type="button" class="ni-back" id="forgotPasswordLink" style="margin:0; font-size:12px;">
+            Forgot password?
+          </button>
+        </div>
+
+        <div class="ni-msg" id="authMsg"></div>
+        <button class="ni-back" id="backToLanding">← Back to Nabeng Invoice</button>
+      </div>
+    </div>
+  </div>
 </section>
+
+<!-- RESET PASSWORD SCREEN (shown when user lands from email link) -->
+<section class="ni-screen ni-hidden" id="resetPasswordScreen">
+  <div class="ni-auth-wrap" style="grid-template-columns:1fr">
+    <div class="ni-auth-card-wrap" style="padding:40px 20px">
+      <div class="ni-auth-card" style="max-width:420px">
+        <div class="ni-logo" style="margin-bottom:18px">
+          <img class="ni-brand-logo" data-ni-brand-logo src="/assets/nabeng-invoice-logo.png" alt="Nabeng Invoice logo">
+          <span>Nabeng Invoice</span>
+        </div>
+        <h3>Set a new password</h3>
+        <p class="sub">Enter your new password below.</p>
+
+        <form id="resetPasswordForm">
+          <div class="ni-field">
+            <label>New password</label>
+            <input id="newPassword" type="password" minlength="8" placeholder="At least 8 characters" required autocomplete="new-password">
+          </div>
+          <div class="ni-field">
+            <label>Confirm new password</label>
+            <input id="confirmPassword" type="password" minlength="8" placeholder="Repeat password" required autocomplete="new-password">
+          </div>
+          <button class="ni-btn ni-btn-primary ni-auth-submit" id="resetPasswordSubmit" type="submit">
+            Update Password
+          </button>
+        </form>
+
+        <div class="ni-msg" id="resetPasswordMsg"></div>
+        <button class="ni-back" id="resetBackToSignIn" type="button" style="margin-top:16px">
+          ← Back to Sign In
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
 <section class="ni-screen ni-dashboard ni-hidden" id="dashboardScreen">
 <nav class="ni-dash-nav"><div class="ni-logo"><img class="ni-brand-logo" data-ni-brand-logo src="/assets/nabeng-invoice-logo.png" alt="Nabeng Invoice logo"><span>Nabeng Invoice</span></div><div class="ni-user-chip"><span class="ni-avatar" id="dashAvatar">N</span><span id="dashUserName">User</span><button class="ni-btn ni-logout" id="dashLogout">Sign Out</button></div></nav>
 <main class="ni-dash-main">
@@ -400,6 +490,156 @@
         <button class="ni-back" id="subLockSignOut" type="button" style="margin-top:18px">
           Sign out
         </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== ABOUT SCREEN ==================== -->
+<section class="ni-screen ni-hidden" id="aboutScreen">
+  <nav class="ni-nav">
+    <div class="ni-logo">
+      <img class="ni-brand-logo" data-ni-brand-logo src="/assets/nabeng-invoice-logo.png" alt="Nabeng Invoice logo">
+      <span>Nabeng Invoice</span>
+    </div>
+    <div class="ni-nav-actions">
+      <button class="ni-btn ni-btn-outline" id="aboutBackHome">← Home</button>
+      <button class="ni-btn ni-btn-primary" id="aboutSignIn">Sign In</button>
+    </div>
+  </nav>
+
+  <div class="ni-page-hero">
+    <h1>About <span>Nabeng Invoice</span></h1>
+    <p>A modern invoice generator built to help small businesses create professional invoices quickly and manage their clients with ease.</p>
+  </div>
+
+  <div class="ni-page-content">
+    <div class="ni-about-grid">
+      <div>
+        <span class="ni-section-label">ABOUT THE SYSTEM</span>
+        <h2>Simple Technology For Better Business Invoicing</h2>
+        <p>
+          Nabeng Invoice is a cloud-based invoice generator designed for freelancers, small businesses, and service providers in Ghana and beyond.
+          Create polished invoices, save customer details, track payments, and download professional PDFs — all from one clean workspace.
+        </p>
+        <p>
+          The system reduces paperwork and helps you look more professional when dealing with clients.
+        </p>
+      </div>
+      <div class="ni-about-logo-card">
+        <img data-ni-brand-logo src="/assets/nabeng-invoice-logo.png" alt="Nabeng Invoice">
+      </div>
+    </div>
+
+    <div class="ni-features-row">
+      <div class="ni-feature-card">
+        <strong>Professional PDFs</strong>
+        <span>Download clean, ready-to-send invoices in seconds.</span>
+      </div>
+      <div class="ni-feature-card">
+        <strong>Customer Management</strong>
+        <span>Save clients once and reuse their details forever.</span>
+      </div>
+      <div class="ni-feature-card">
+        <strong>Payment Tracking</strong>
+        <span>Record payments and see outstanding balances clearly.</span>
+      </div>
+      <div class="ni-feature-card">
+        <strong>Cloud Workspace</strong>
+        <span>Access your invoices and business profile from anywhere.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CONTACT SCREEN ==================== -->
+<section class="ni-screen ni-hidden" id="contactScreen">
+  <nav class="ni-nav">
+    <div class="ni-logo">
+      <img class="ni-brand-logo" data-ni-brand-logo src="/assets/nabeng-invoice-logo.png" alt="Nabeng Invoice logo">
+      <span>Nabeng Invoice</span>
+    </div>
+    <div class="ni-nav-actions">
+      <button class="ni-btn ni-btn-outline" id="contactBackHome">← Home</button>
+      <button class="ni-btn ni-btn-primary" id="contactSignIn">Sign In</button>
+    </div>
+  </nav>
+
+  <div class="ni-page-hero">
+    <h1>Get In <span>Touch</span></h1>
+    <p>Have a question, need help, or want to give feedback about Nabeng Invoice? Send us a message.</p>
+  </div>
+
+  <div class="ni-page-content">
+    <div class="ni-contact-grid">
+      <!-- Contact Info Card -->
+      <div class="ni-contact-info">
+        <h3>Contact Information</h3>
+        <p>We are available to answer questions and provide assistance concerning Nabeng Invoice.</p>
+
+        <div class="ni-contact-item">
+          <div class="ni-contact-icon">📞</div>
+          <div>
+            <strong>Phone</strong>
+            <span>+233 20 144 3088 / +233 59 958 1301</span>
+          </div>
+        </div>
+
+        <div class="ni-contact-item">
+          <div class="ni-contact-icon">✉️</div>
+          <div>
+            <strong>Email</strong>
+            <span>boabengnathaniel@gmail.com</span>
+          </div>
+        </div>
+
+        <div class="ni-contact-item">
+          <div class="ni-contact-icon">📍</div>
+          <div>
+            <strong>Location</strong>
+            <span>Awutu Bawjiase, Ghana</span>
+          </div>
+        </div>
+
+        <div class="ni-contact-item">
+          <div class="ni-contact-icon">🕒</div>
+          <div>
+            <strong>Support</strong>
+            <span>Monday – Friday</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="ni-contact-form-card">
+        <h3>Send Us A Message</h3>
+        <p>Fill in the form below and we’ll get back to you.</p>
+
+        <form id="contactForm">
+          <div class="ni-contact-row">
+            <div class="ni-field">
+              <label>Your Name</label>
+              <input id="contactName" type="text" placeholder="Enter your name" required>
+            </div>
+            <div class="ni-field">
+              <label>Email Address</label>
+              <input id="contactEmail" type="email" placeholder="Enter your email" required>
+            </div>
+          </div>
+
+          <div class="ni-field">
+            <label>Subject</label>
+            <input id="contactSubject" type="text" placeholder="What is your message about?" required>
+          </div>
+
+          <div class="ni-field">
+            <label>Message</label>
+            <textarea id="contactMessage" rows="5" placeholder="Write your message here..." required></textarea>
+          </div>
+
+          <button type="submit" class="ni-btn ni-btn-primary" id="contactSubmitBtn">Send Message</button>
+        </form>
+        <div class="ni-msg" id="contactMsg"></div>
       </div>
     </div>
   </div>

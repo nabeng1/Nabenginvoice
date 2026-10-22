@@ -140,11 +140,26 @@ onClick("dashboardInvoiceBtn", async () => {
   NI.niOpenEditor();
 });
 
+onClick('forgotPasswordLink', NI.niOpenForgotPassword);
+onClick('resetBackToSignIn', () => NI.niOpenAuth('signin'));
+onSubmit('resetPasswordForm', NI.niUpdatePassword);
+
 onClick("payMonthlyBtn", () => NI.niStartPaystackPayment("monthly"));
 onClick("payYearlyBtn",  () => NI.niStartPaystackPayment("yearly"));
 onClick("subLockSignOut", NI.niSignOut);
-}
 
+// About & Contact navigation
+onClick('navAbout', () => NI.niOpenAbout());
+onClick('navContact', () => NI.niOpenContact());
+
+onClick('aboutBackHome', () => NI.niOpenLanding());
+onClick('contactBackHome', () => NI.niOpenLanding());
+
+onClick('aboutSignIn', () => NI.niOpenAuth('signin'));
+onClick('contactSignIn', () => NI.niOpenAuth('signin'));
+
+onSubmit('contactForm', NI.niSubmitContactForm);
+}
 Object.assign(NI, {
   niWire
 });
