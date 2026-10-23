@@ -215,26 +215,6 @@ async function niUpdatePassword(e) {
 
 
 
-async function niHandleAuthCallback() {
-  // Supabase recovery links come with type=recovery in the URL hash
-  const hash = window.location.hash;
-  if (hash && (hash.includes('type=recovery') || hash.includes('type=invite'))) {
-    try {
-      // Give Supabase a moment to process the token from the URL
-      const { data: { session } } = await NI.state.niSupabase.auth.getSession();
-      
-      if (session) {
-        NI.niOpenResetPasswordScreen();
-        // Clean the ugly hash from the URL
-        window.history.replaceState({}, document.title, window.location.pathname);
-      }
-    } catch (err) {
-      console.error('Recovery link error:', err);
-    }
-  }
-}
-
-
 async function niLoadUser(user){
   NI.state.niSession=user;
   try{ NI.state.niProfile=await NI.niEnsureProfile(user); }catch(e){ console.error('Profile load failed',e); NI.state.niProfile={user_id:user.id,full_name:user.user_metadata?.full_name||'',business_name:'',business_email:user.email||'',business_phone:'',business_address:'',logo_url:'',signature_url:''}; }
@@ -266,7 +246,40 @@ async function niLoadUser(user){
   NI.niOpenDashboard();
 }
 
-// Call this inside niStart()
+async function niHandleAuthCallback() {
+  const hash = window.location.hash;
+  const search = window.location.search;
+
+  const isRecovery =
+    (hash && (hash.includes('type=recovery') || hash.includes('type=invite'))) ||
+    (search && (search.includes('type=recovery') || search.includes('type=invite')));
+
+  if (!isRecovery) return false;
+
+  try {
+    // Wait a short moment for Supabase to process the tokens
+    await new Promise(resolve => setTimeout(resolve, 300));
+
+    const { data: { session }, error } = await NI.state.niSupabase.auth.getSession();
+
+    if (error) {
+      console.error('Recovery session error:', error);
+      return false;
+    }
+
+    if (session) {
+      NI.niOpenResetPasswordScreen();
+      // Clean the URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+      return true; // important: tell niStart we handled recovery
+    }
+  } catch (err) {
+    console.error('Recovery link error:', err);
+  }
+
+  return false;
+}
+
 async function niStart() {
   if (!NI.niInitSupabase()) {
     NI.niOpenLanding();
@@ -274,10 +287,14 @@ async function niStart() {
     return;
   }
 
-  // Important: check for recovery link first
-  await NI.niHandleAuthCallback();
+  // Check for recovery link first
+  const isRecovery = await NI.niHandleAuthCallback();
+
+  // If this is a password recovery, stop here — don't load the dashboard
+  if (isRecovery) return;
 
   const { data: { session } } = await NI.state.niSupabase.auth.getSession();
+
   if (session?.user) {
     await NI.niLoadUser(session.user);
   } else {
@@ -286,8 +303,13 @@ async function niStart() {
 
   NI.state.niSupabase.auth.onAuthStateChange(async (_event, sessionNow) => {
     if (sessionNow?.user && !NI.state.niSession) {
+      // Don't auto-load user if we are on the reset password screen
+      if (NI.$('resetPasswordScreen') && !NI.$('resetPasswordScreen').classList.contains('ni-hidden')) {
+        return;
+      }
       await NI.niLoadUser(sessionNow.user);
     }
+
     if (!sessionNow?.user) {
       NI.state.niSession = null;
       NI.state.niProfile = null;
@@ -296,7 +318,6 @@ async function niStart() {
   });
 }
 
-// Update niAuthSubmit so it handles the "forgot" mode
 async function niAuthSubmit(e) {
   e.preventDefault();
   NI.niClearMsg('authMsg');
@@ -306,7 +327,7 @@ async function niAuthSubmit(e) {
     return;
   }
 
-  // If we are in forgot-password mode → send reset link
+  // Forgot password mode
   if (NI.state.niAuthMode === 'forgot') {
     return NI.niSendResetLink(e);
   }
@@ -315,19 +336,35 @@ async function niAuthSubmit(e) {
   const password = NI.$('authPassword').value;
   const name = NI.$('authName').value.trim();
 
+  // Manual validation (important)
+  if (!email) {
+    NI.niMsg('authMsg', 'Please enter your email address.', 'error');
+    return;
+  }
+
+  if (!password) {
+    NI.niMsg('authMsg', 'Please enter your password.', 'error');
+    return;
+  }
+
+  if (NI.state.niAuthMode === 'signup' && !name) {
+    NI.niMsg('authMsg', 'Please enter your full name.', 'error');
+    return;
+  }
+
   NI.$('authSubmit').disabled = true;
   NI.$('authSubmit').textContent =
     NI.state.niAuthMode === 'signup' ? 'Creating account…' : 'Signing in…';
 
   try {
     if (NI.state.niAuthMode === 'signup') {
-      if (!name) throw new Error('Please enter your full name.');
       const { data, error } = await NI.state.niSupabase.auth.signUp({
         email,
         password,
         options: { data: { full_name: name } },
       });
       if (error) throw error;
+
       if (data.session) {
         await NI.niLoadUser(data.user);
       } else {
