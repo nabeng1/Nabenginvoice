@@ -1139,7 +1139,7 @@ body{background:var(--ni-bg);color:var(--ni-text)}
 #sheet[data-template="minimal"] .invoice-band{background:transparent!important;color:var(--invoice-accent);text-align:right;font-size:27px;padding:18px 34px}
 #sheet[data-template="minimal"] .details{padding-top:16px}
 #sheet[data-template="creative"]{font-family:Inter,Arial,sans-serif;border-radius:4px}
-#sheet[data-template="creative"] .head{border-left:12px solid var(--invoice-accent);background:linear-gradient(110deg,color-mix(in srgb,var(--invoice-accent) 9%,white),white 65%)}
+#sheet[data-template="creative"] .head{border-left:12px solid var(--invoice-accent);background:linear-gradient(110deg,rgba(21,88,255,0.09),white 65%)}
 #sheet[data-template="creative"] .invoice-band{margin:0 26px;border-radius:7px;text-align:left}
 #sheet[data-template="elegant"]{font-family:Georgia,serif;border:2px solid var(--invoice-accent);border-radius:0;box-shadow:none}
 #sheet[data-template="elegant"] .head{border-bottom:1px solid var(--invoice-accent)}
@@ -1173,7 +1173,7 @@ body{background:var(--ni-bg);color:var(--ni-text)}
 #sheet[data-template="classic"]{border-top:5px solid var(--invoice-accent);}
 #sheet[data-template="classic"] .head{padding-top:31px;}
 #sheet[data-template="classic"] .invoice-band{display:flex;justify-content:space-between;align-items:center;box-shadow:inset -90px 0 0 rgba(255,255,255,.08);}
-#sheet[data-template="classic"] .total-box .total-value{box-shadow:5px 5px 0 color-mix(in srgb,var(--invoice-accent) 18%,white);}
+#sheet[data-template="classic"] .total-box .total-value{box-shadow:5px 5px 0 rgba(21,88,255,0.18);}
 
 /* 02 — Corporate Pro: executive dark masthead and sharp document grid */
 #sheet[data-template="corporate"]{border:0;border-radius:0;box-shadow:0 22px 58px rgba(15,23,42,.2);}
@@ -1203,18 +1203,18 @@ body{background:var(--ni-bg);color:var(--ni-text)}
 
 /* 04 — Creative: architectural side rail and asymmetric accent panels */
 #sheet[data-template="creative"]{border:0;border-radius:0 16px 0 0;box-shadow:0 22px 58px rgba(15,23,42,.14);}
-#sheet[data-template="creative"]:before{content:"";position:absolute;z-index:-1;top:0;right:0;width:25%;height:250px;background:color-mix(in srgb,var(--invoice-accent) 10%,white);clip-path:polygon(35% 0,100% 0,100% 100%,0 55%);}
+#sheet[data-template="creative"]:before{content:"";position:absolute;z-index:-1;top:0;right:0;width:25%;height:250px;background:rgba(21,88,255,0.10);clip-path:polygon(35% 0,100% 0,100% 100%,0 55%);}
 #sheet[data-template="creative"] .head{border-left:10px solid var(--invoice-accent);padding-left:27px;background:transparent;}
 #sheet[data-template="creative"] .invoice-band{margin:0 26px;padding:17px 22px;border-radius:0 12px 0 0;}
 #sheet[data-template="creative"] table.items{border:0;border-radius:0;}
 #sheet[data-template="creative"] table.items thead th{background:var(--invoice-accent);}
-#sheet[data-template="creative"] table.items tbody td{border-bottom:1px solid color-mix(in srgb,var(--invoice-accent) 15%,white);}
+#sheet[data-template="creative"] table.items tbody td{border-bottom:1px solid rgba(21,88,255,0.15);}
 #sheet[data-template="creative"] .total-box .total-value{border-radius:0 10px 0 0;}
 #sheet[data-template="creative"] .sign-row{border-left:3px solid var(--invoice-accent);}
 
 /* 05 — Elegant Premium: luxury serif typography, double rules and gold-ready palette */
-#sheet[data-template="elegant"]{border:1px solid var(--invoice-accent);outline:1px solid color-mix(in srgb,var(--invoice-accent) 45%,white);outline-offset:-7px;border-radius:0;box-shadow:none;font-family:Georgia,"Times New Roman",serif;}
-#sheet[data-template="elegant"] .head{padding:40px 42px 27px;background:#fff;border-bottom:1px solid color-mix(in srgb,var(--invoice-accent) 45%,white);}
+#sheet[data-template="elegant"]{border:1px solid var(--invoice-accent);outline:1px solid rgba(21,88,255,0.45);outline-offset:-7px;border-radius:0;box-shadow:none;font-family:Georgia,"Times New Roman",serif;}
+#sheet[data-template="elegant"] .head{padding:40px 42px 27px;background:#fff;border-bottom:1px solid rgba(21,88,255,0.45);}
 #sheet[data-template="elegant"] .head-text .biz-name{font-family:Georgia,"Times New Roman",serif;font-size:27px;font-weight:700;letter-spacing:.01em;}
 #sheet[data-template="elegant"] .head-text .biz-line{font-family:Georgia,serif;font-size:11px;}
 #sheet[data-template="elegant"] .logo-circle{border:1px solid var(--invoice-accent);border-radius:0;}
@@ -1222,7 +1222,7 @@ body{background:var(--ni-bg);color:var(--ni-text)}
 #sheet[data-template="elegant"] .details{font-family:Georgia,serif;}
 #sheet[data-template="elegant"] .dline .dlabel{font-family:Georgia,serif;letter-spacing:.06em;}
 #sheet[data-template="elegant"] .dline .dval{font-family:Georgia,serif;}
-#sheet[data-template="elegant"] table.items{border:1px solid color-mix(in srgb,var(--invoice-accent) 35%,white);border-radius:0;}
+#sheet[data-template="elegant"] table.items{border:1px solid rgba(21,88,255,0.35);border-radius:0;}
 #sheet[data-template="elegant"] table.items thead th{background:var(--invoice-accent);font-family:Georgia,serif;letter-spacing:.1em;}
 #sheet[data-template="elegant"] table.items tbody td{font-family:Georgia,serif;background:#fff!important;border-bottom:1px solid #eee8df;}
 #sheet[data-template="elegant"] .total-box .total-value{background:#fff;color:var(--invoice-accent);border:1px solid var(--invoice-accent);border-radius:0;font-family:Georgia,serif;}
@@ -1245,9 +1245,9 @@ body{background:var(--ni-bg);color:var(--ni-text)}
 #sheet[data-template="ledger"] table.items{border-radius:0;border:1px solid #cbd5e1}
 #sheet[data-template="ledger"] table.items thead th{background:#172033;color:#fff;border-right:1px solid #3b4658}
 #sheet[data-template="ledger"] table.items tbody tr:nth-child(even) td{background:#f1f5f9}
-#sheet[data-template="ledger"] .total-box .total-value{border-radius:2px;box-shadow:5px 5px 0 color-mix(in srgb,var(--invoice-accent) 20%,white)}
+#sheet[data-template="ledger"] .total-box .total-value{border-radius:2px;box-shadow:5px 5px 0 rgba(21,88,255,0.20)}
 #sheet[data-template="signature"]{border:1px solid #d6c7a0;border-radius:3px;box-shadow:0 20px 45px rgba(41,37,36,.13);font-family:Georgia,"Times New Roman",serif}
-#sheet[data-template="signature"]:after{content:"";position:absolute;inset:8px;border:1px solid color-mix(in srgb,var(--invoice-accent) 48%,white);pointer-events:none;z-index:2}
+#sheet[data-template="signature"]:after{content:"";position:absolute;inset:8px;border:1px solid rgba(21,88,255,0.48);pointer-events:none;z-index:2}
 #sheet[data-template="signature"] .head{padding:42px 42px 27px;background:linear-gradient(110deg,#fbf8f1,#fff 70%);border-bottom:1px solid #e7dcc4}
 #sheet[data-template="signature"] .head-text .biz-name{font:700 27px Georgia,"Times New Roman",serif;letter-spacing:.015em}
 #sheet[data-template="signature"] .head-text .biz-line{font-family:Georgia,serif;color:#6b6254}
