@@ -10,6 +10,75 @@ import "../runtime.js";
   const logoPreview = document.getElementById('logoPreview');
   const pLogoCircle = document.getElementById('pLogoCircle');
 
+  // Invoice design preferences: template and accent are applied to the real
+  // invoice sheet, so the same styling is used by PDF export and printing.
+  const designOptions = [
+    {id:'classic',name:'Modern Classic'},
+    {id:'minimal',name:'Minimal'},
+    {id:'creative',name:'Creative'},
+    {id:'ledger',name:'Executive Ledger'},
+    {id:'signature',name:'Signature Luxe'}
+  ];
+  const accentOptions = [
+    {name:'Blue',value:'#2563eb'},{name:'Green',value:'#16a34a'},
+    {name:'Purple',value:'#7c3aed'},{name:'Orange',value:'#f97316'},
+    {name:'Red',value:'#dc2626'},{name:'Navy',value:'#172554'},
+    {name:'Teal',value:'#0d9488'},{name:'Pink',value:'#db2777'},
+    {name:'Gold',value:'#b8860b'},{name:'Black',value:'#171717'}
+  ];
+  const designStorageKey = () => 'nabengInvoiceDesign:' + (NI.state?.niSession?.id || 'guest');
+  function readDesignPrefs(){
+    try { return JSON.parse(localStorage.getItem(designStorageKey()) || '{}'); }
+    catch { return {}; }
+  }
+  function applyInvoiceDesign(template, accent, save=true){
+    const sheet=document.getElementById('sheet');
+    if(!sheet)return;
+    const safeTemplate=designOptions.some(x=>x.id===template)?template:'classic';
+    const safeAccent=accentOptions.some(x=>x.value===accent)?accent:'#2563eb';
+    sheet.dataset.template=safeTemplate;
+    sheet.style.setProperty('--invoice-accent',safeAccent);
+    document.querySelectorAll('input[name="niTemplate"]').forEach(input=>{input.checked=input.value===safeTemplate;});
+    const t=document.getElementById('niTemplateSelect');
+    const c=document.getElementById('niAccentSelect');
+    if(t)t.value=safeTemplate;
+    if(c)c.value=safeAccent;
+    document.querySelectorAll('.ni-design-swatch').forEach(btn=>{
+      btn.classList.toggle('is-selected',btn.dataset.colour===safeAccent);
+      btn.setAttribute('aria-pressed',String(btn.dataset.colour===safeAccent));
+    });
+    if(save){
+      try{localStorage.setItem(designStorageKey(),JSON.stringify({template:safeTemplate,accent:safeAccent}));}
+      catch(e){console.warn('Could not save invoice design preference',e);}
+    }
+  }
+  function installDesignControls(){
+    const dashboard=document.getElementById('dashboardScreen');
+    if(!dashboard||document.getElementById('niDesignControls'))return;
+    const controls=document.createElement('section');
+    controls.id='niDesignControls'; controls.className='ni-design-controls ni-dashboard-design';
+    controls.innerHTML=`
+      <div class="ni-design-heading"><div><strong>Invoice appearance</strong><span>Set the default design for new invoices</span></div><span class="ni-design-tag">YOUR BRAND</span></div>
+      <label class="ni-design-label">Choose a template</label>
+      <div class="ni-template-options">${designOptions.map(d=>`<label class="ni-template-option"><input type="radio" name="niTemplate" value="${d.id}"><span class="ni-template-mini" data-mini="${d.id}"><i></i><b></b><em></em></span><span>${d.name}</span></label>`).join('')}</div>
+      <label class="ni-design-label">Choose an accent colour</label>
+      <div class="ni-design-colours">${accentOptions.map(c=>`<button type="button" class="ni-design-swatch" data-colour="${c.value}" aria-label="${c.name}" title="${c.name}"><i></i><span>${c.name}</span></button>`).join('')}</div>
+      <div class="ni-design-note"><span>ⓘ</span> Saved as your default for new invoices. The editor and PDF output will use this design. Your business logo is also added as a subtle watermark.</div>`;
+    const actions=dashboard.querySelector('.ni-actions');
+    if(actions) actions.insertAdjacentElement('afterend',controls); else dashboard.querySelector('.ni-dash-main')?.appendChild(controls);
+    controls.querySelectorAll('input[name="niTemplate"]').forEach(input=>input.addEventListener('change',()=>{const prefs=readDesignPrefs();applyInvoiceDesign(input.value,prefs.accent||'#2563eb');}));
+    controls.querySelectorAll('.ni-design-swatch').forEach(btn=>btn.addEventListener('click',()=>{const prefs=readDesignPrefs();applyInvoiceDesign(prefs.template||'classic',btn.dataset.colour);}));
+    const prefs=readDesignPrefs();
+    controls.querySelectorAll('input[name="niTemplate"]').forEach(input=>input.checked=input.value===(prefs.template||'classic'));
+    applyInvoiceDesign(prefs.template||'classic',prefs.accent||'#2563eb',false);
+  }
+  function applySavedInvoiceDesign(){const prefs=readDesignPrefs();applyInvoiceDesign(prefs.template||'classic',prefs.accent||'#2563eb',false);}
+  installDesignControls();
+  const sheetForWatermark=document.getElementById('sheet');
+  if(sheetForWatermark&&!sheetForWatermark.querySelector('.sheet-watermark')){const wm=document.createElement('img');wm.className='sheet-watermark';wm.alt='';wm.setAttribute('aria-hidden','true');sheetForWatermark.prepend(wm);}
+
+
+
   function fmt(n){
     const val = isNaN(n) ? 0 : n;
     return val.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -68,6 +137,7 @@ import "../runtime.js";
   }
 
   function renderPreview(){
+    installDesignControls();
     document.getElementById('pBizName').textContent = document.getElementById('bizName').value || 'Business Name';
     document.getElementById('pBizAddress').textContent = document.getElementById('bizAddress').value;
     document.getElementById('pBizTel').textContent = document.getElementById('bizTel').value ? ('Tel: ' + document.getElementById('bizTel').value) : '';
@@ -121,7 +191,9 @@ import "../runtime.js";
     escapeHtml,
     formatDate,
     renderItemRows,
-    renderPreview
+    renderPreview,
+    applyInvoiceDesign,
+    applySavedInvoiceDesign
   });
 
   addItemBtn.addEventListener('click', () => {

@@ -99,7 +99,7 @@ async function niSaveInvoiceRecord(){
   NI.state.niEditingInvoiceId=result.data.id; NI.state.niCurrentInvoice=result.data; await NI.niLoadInvoiceHistory(); await NI.niLoadAnalytics(); return result.data;
 }
 function niOpenEditor(){
-  NI.niHide('landingScreen');NI.niHide('authScreen');NI.niHide('dashboardScreen');NI.niShow('invoiceApp');NI.niShow('editorBar');document.body.classList.remove('ni-auth-mode');document.body.classList.add('ni-editor-mode');
+  NI.niHide('landingScreen');NI.niHide('authScreen');NI.niHide('dashboardScreen');NI.niShow('invoiceApp');NI.niShow('editorBar');document.body.classList.remove('ni-auth-mode');document.body.classList.add('ni-editor-mode');NI.applySavedInvoiceDesign?.();
   // Load the signed-in business profile into the existing invoice form.
   if(NI.state.niProfile){
     const set=(id,val)=>{const el=document.getElementById(id);if(el)el.value=val||'';};

@@ -1103,3 +1103,165 @@ body{background:var(--ni-bg);color:var(--ni-text)}
     justify-content: center;
   }
 }
+
+/* Invoice design picker and five live invoice styles */
+.ni-design-controls{width:min(100%,760px);box-sizing:border-box;margin:0 auto 18px;padding:18px 20px;background:#fff;border:1px solid #e2e8f0;border-radius:16px;box-shadow:0 8px 26px rgba(15,23,42,.06);font-family:Inter,system-ui,sans-serif;color:#0f172a}
+.ni-design-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.ni-design-heading strong{display:block;font-size:16px;font-weight:800}.ni-design-heading span:not(.ni-design-tag){display:block;margin-top:4px;color:#64748b;font-size:12px}
+.ni-design-tag{padding:6px 8px;border-radius:999px;background:#eff6ff;color:#1d4ed8;font-size:9px;font-weight:900;letter-spacing:.08em;white-space:nowrap}
+.ni-design-label{display:block;margin:13px 0 9px;font-size:11px;font-weight:800;color:#475569;text-transform:uppercase;letter-spacing:.07em}
+.ni-template-options{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.ni-template-option{min-width:0;display:flex;flex-direction:column;gap:7px;align-items:center;padding:8px 5px;border:1px solid #e2e8f0;border-radius:10px;cursor:pointer;font-size:10px;font-weight:700;text-align:center;color:#334155}
+.ni-template-option:has(input:checked){border-color:#2563eb;background:#eff6ff;box-shadow:0 0 0 1px #2563eb}
+.ni-template-option input{position:absolute;opacity:0;pointer-events:none}
+.ni-template-mini{height:52px;width:100%;max-width:66px;display:flex;flex-direction:column;gap:5px;padding:7px;box-sizing:border-box;border:1px solid #dbe3ed;border-radius:4px;background:#fff;box-shadow:0 2px 4px #0f172a0b}
+.ni-template-mini i{display:block;height:8px;background:var(--invoice-accent,#2563eb);border-radius:1px}
+.ni-template-mini b{display:block;height:3px;width:80%;background:#cbd5e1}
+.ni-template-mini em{display:block;height:14px;border:1px solid #e2e8f0;background:repeating-linear-gradient(to bottom,#fff 0 3px,#e2e8f0 3px 4px)}
+.ni-template-mini[data-mini="corporate"]{background:#172033;border-color:#172033}.ni-template-mini[data-mini="corporate"] b{background:#64748b}
+.ni-template-mini[data-mini="minimal"]{border:0;box-shadow:none}.ni-template-mini[data-mini="minimal"] i{height:3px}
+.ni-template-mini[data-mini="creative"]{border-top:4px solid var(--invoice-accent,#2563eb);transform:skewY(-2deg)}
+.ni-template-mini[data-mini="elegant"]{border:2px solid var(--invoice-accent,#2563eb);border-radius:0}
+.ni-design-colours{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:7px}
+.ni-design-swatch{min-width:0;border:1px solid transparent;background:transparent;border-radius:9px;padding:6px 1px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;color:#475569;font:600 9px Inter,system-ui,sans-serif}
+.ni-design-swatch i{width:22px;height:22px;display:block;border-radius:50%;background:var(--swatch);box-shadow:inset 0 0 0 1px #00000012}
+.ni-design-swatch[data-colour="#2563eb"] i{--swatch:#2563eb}.ni-design-swatch[data-colour="#16a34a"] i{--swatch:#16a34a}.ni-design-swatch[data-colour="#7c3aed"] i{--swatch:#7c3aed}.ni-design-swatch[data-colour="#f97316"] i{--swatch:#f97316}.ni-design-swatch[data-colour="#dc2626"] i{--swatch:#dc2626}.ni-design-swatch[data-colour="#172554"] i{--swatch:#172554}.ni-design-swatch[data-colour="#0d9488"] i{--swatch:#0d9488}.ni-design-swatch[data-colour="#db2777"] i{--swatch:#db2777}.ni-design-swatch[data-colour="#b8860b"] i{--swatch:#b8860b}.ni-design-swatch[data-colour="#171717"] i{--swatch:#171717}
+.ni-design-swatch.is-selected{border-color:#2563eb;background:#eff6ff;color:#1d4ed8}
+.ni-design-note{display:flex;gap:7px;align-items:flex-start;margin-top:13px;padding-top:12px;border-top:1px solid #eef2f7;color:#64748b;font-size:11px;line-height:1.5}
+#sheet{--invoice-accent:#2563eb}
+#sheet .invoice-band{background:var(--invoice-accent)!important}
+#sheet .total-row,#sheet .grand-total,#sheet .amount-due{border-color:var(--invoice-accent)}
+#sheet[data-template="corporate"]{font-family:Arial,sans-serif;border-radius:2px;border-top:8px solid var(--invoice-accent);box-shadow:none}
+#sheet[data-template="corporate"] .head{background:#f1f5f9}
+#sheet[data-template="corporate"] .invoice-band{margin:0 24px;text-align:left;letter-spacing:.08em}
+#sheet[data-template="minimal"]{font-family:Inter,Arial,sans-serif;border:0;border-radius:0;box-shadow:none}
+#sheet[data-template="minimal"] .head{border-bottom:2px solid var(--invoice-accent)}
+#sheet[data-template="minimal"] .invoice-band{background:transparent!important;color:var(--invoice-accent);text-align:right;font-size:27px;padding:18px 34px}
+#sheet[data-template="minimal"] .details{padding-top:16px}
+#sheet[data-template="creative"]{font-family:Inter,Arial,sans-serif;border-radius:4px}
+#sheet[data-template="creative"] .head{border-left:12px solid var(--invoice-accent);background:linear-gradient(110deg,color-mix(in srgb,var(--invoice-accent) 9%,white),white 65%)}
+#sheet[data-template="creative"] .invoice-band{margin:0 26px;border-radius:7px;text-align:left}
+#sheet[data-template="elegant"]{font-family:Georgia,serif;border:2px solid var(--invoice-accent);border-radius:0;box-shadow:none}
+#sheet[data-template="elegant"] .head{border-bottom:1px solid var(--invoice-accent)}
+#sheet[data-template="elegant"] .invoice-band{background:#fff!important;color:var(--invoice-accent);font-family:Georgia,serif;letter-spacing:.2em;border-bottom:2px solid var(--invoice-accent);border-top:2px solid var(--invoice-accent)}
+@media(max-width:700px){.ni-template-options{grid-template-columns:repeat(3,minmax(0,1fr))}.ni-design-colours{grid-template-columns:repeat(5,minmax(0,1fr))}.ni-design-controls{padding:14px}.ni-design-heading{align-items:flex-start}}
+@media print{.ni-design-controls{display:none!important}}
+
+/* NABENG EXECUTIVE INVOICE COLLECTION — refined, clearly differentiated layouts */
+#sheet{position:relative;isolation:isolate;--invoice-ink:#172033;--invoice-muted:#667085;--invoice-line:#e3e8ef;background:#fff;color:var(--invoice-ink);border:1px solid #d8dee8;border-radius:3px;box-shadow:0 22px 58px rgba(15,23,42,.15);}
+#sheet .head{position:relative;padding:34px 36px 27px;gap:18px;background:#fff;}
+#sheet .head-text .biz-name{font-family:Inter,Arial,sans-serif;font-size:25px;font-weight:800;letter-spacing:-.045em;color:var(--invoice-accent);}
+#sheet .head-text .biz-line{font-size:10px;line-height:1.55;color:#667085;}
+#sheet .logo-circle{border-radius:12px;border-color:#e2e8f0;background:#fff;}
+#sheet .invoice-band{padding:15px 34px;background:var(--invoice-accent)!important;color:#fff;font:800 20px/1.2 Inter,Arial,sans-serif;letter-spacing:.18em;text-align:left;}
+#sheet .details{padding:25px 36px 10px;font-family:Inter,Arial,sans-serif;}
+#sheet .dline .dlabel{font-family:Inter,Arial,sans-serif;color:#697586;font-size:9px;letter-spacing:.1em;}
+#sheet .dline .dval{font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:600;border-color:#e4e7ec;}
+#sheet .details-row{gap:28px;}
+#sheet table.items{width:calc(100% - 72px);margin:15px 36px 0;border:1px solid #e0e5ed;border-radius:3px;}
+#sheet table.items thead th{padding:12px 9px;background:var(--invoice-accent);color:#fff;font:700 9px Inter,Arial,sans-serif;letter-spacing:.07em;}
+#sheet table.items tbody td{height:32px;padding:9px 8px;font:500 10.5px Inter,Arial,sans-serif;border-bottom:1px solid #edf0f4;}
+#sheet table.items tbody tr:nth-child(even) td{background:#f8fafc;}
+#sheet .total-wrap{margin:20px 36px 0;}
+#sheet .total-box .total-label{font-size:10px;letter-spacing:.1em;}
+#sheet .total-box .total-value{border:0;border-radius:2px;background:var(--invoice-accent);color:#fff;padding:13px 16px;font-size:17px;}
+#sheet .sign-row{padding:0 36px;margin-top:42px;}
+#sheet .sign-line{border-color:var(--invoice-accent);}
+#sheet .sign-block .sign-label{font-size:9px;letter-spacing:.12em;}
+
+/* 01 — Modern Classic: crisp blue corporate stationery */
+#sheet[data-template="classic"]{border-top:5px solid var(--invoice-accent);}
+#sheet[data-template="classic"] .head{padding-top:31px;}
+#sheet[data-template="classic"] .invoice-band{display:flex;justify-content:space-between;align-items:center;box-shadow:inset -90px 0 0 rgba(255,255,255,.08);}
+#sheet[data-template="classic"] .total-box .total-value{box-shadow:5px 5px 0 color-mix(in srgb,var(--invoice-accent) 18%,white);}
+
+/* 02 — Corporate Pro: executive dark masthead and sharp document grid */
+#sheet[data-template="corporate"]{border:0;border-radius:0;box-shadow:0 22px 58px rgba(15,23,42,.2);}
+#sheet[data-template="corporate"] .head{background:#172033;color:#fff;padding:38px 36px 30px;border-bottom:4px solid var(--invoice-accent);}
+#sheet[data-template="corporate"] .head-text .biz-name{color:#fff;}
+#sheet[data-template="corporate"] .head-text .biz-line{color:#cbd5e1;}
+#sheet[data-template="corporate"] .logo-circle{background:#fff;border:0;border-radius:3px;}
+#sheet[data-template="corporate"] .invoice-band{margin:0;background:var(--invoice-accent)!important;padding:17px 36px;text-align:left;font-size:23px;letter-spacing:.22em;}
+#sheet[data-template="corporate"] .details{padding-top:28px;}
+#sheet[data-template="corporate"] table.items{border-radius:0;border-color:#d4dbe5;}
+#sheet[data-template="corporate"] table.items thead th{background:#172033;color:#fff;}
+#sheet[data-template="corporate"] table.items tbody tr:nth-child(even) td{background:#f1f4f8;}
+#sheet[data-template="corporate"] .total-box .total-value{border-radius:0;box-shadow:7px 7px 0 #e8ebf0;}
+#sheet[data-template="corporate"] .sign-line{border-bottom-width:2px;}
+
+/* 03 — Minimal: premium editorial spacing, restrained colour and fine rules */
+#sheet[data-template="minimal"]{border:0;border-radius:0;box-shadow:none;}
+#sheet[data-template="minimal"] .head{padding:42px 38px 30px;border-bottom:1px solid #d9dee7;}
+#sheet[data-template="minimal"] .head-text .biz-name{font-size:22px;letter-spacing:-.03em;}
+#sheet[data-template="minimal"] .invoice-band{background:transparent!important;color:var(--invoice-accent);padding:28px 38px 12px;text-align:right;font-size:29px;letter-spacing:.12em;border-bottom:1px solid var(--invoice-accent);}
+#sheet[data-template="minimal"] .details{padding-top:30px;}
+#sheet[data-template="minimal"] table.items{border:0;border-radius:0;border-top:2px solid var(--invoice-accent);}
+#sheet[data-template="minimal"] table.items thead th{background:#fff;color:var(--invoice-accent);border-bottom:1px solid #cfd5df;}
+#sheet[data-template="minimal"] table.items tbody td{background:#fff!important;border-bottom:1px solid #e8ebf0;}
+#sheet[data-template="minimal"] .total-box .total-value{background:#fff;color:var(--invoice-accent);border:1px solid var(--invoice-accent);}
+#sheet[data-template="minimal"] .sign-line{border-color:#aeb7c5;}
+
+/* 04 — Creative: architectural side rail and asymmetric accent panels */
+#sheet[data-template="creative"]{border:0;border-radius:0 16px 0 0;box-shadow:0 22px 58px rgba(15,23,42,.14);}
+#sheet[data-template="creative"]:before{content:"";position:absolute;z-index:-1;top:0;right:0;width:25%;height:250px;background:color-mix(in srgb,var(--invoice-accent) 10%,white);clip-path:polygon(35% 0,100% 0,100% 100%,0 55%);}
+#sheet[data-template="creative"] .head{border-left:10px solid var(--invoice-accent);padding-left:27px;background:transparent;}
+#sheet[data-template="creative"] .invoice-band{margin:0 26px;padding:17px 22px;border-radius:0 12px 0 0;}
+#sheet[data-template="creative"] table.items{border:0;border-radius:0;}
+#sheet[data-template="creative"] table.items thead th{background:var(--invoice-accent);}
+#sheet[data-template="creative"] table.items tbody td{border-bottom:1px solid color-mix(in srgb,var(--invoice-accent) 15%,white);}
+#sheet[data-template="creative"] .total-box .total-value{border-radius:0 10px 0 0;}
+#sheet[data-template="creative"] .sign-row{border-left:3px solid var(--invoice-accent);}
+
+/* 05 — Elegant Premium: luxury serif typography, double rules and gold-ready palette */
+#sheet[data-template="elegant"]{border:1px solid var(--invoice-accent);outline:1px solid color-mix(in srgb,var(--invoice-accent) 45%,white);outline-offset:-7px;border-radius:0;box-shadow:none;font-family:Georgia,"Times New Roman",serif;}
+#sheet[data-template="elegant"] .head{padding:40px 42px 27px;background:#fff;border-bottom:1px solid color-mix(in srgb,var(--invoice-accent) 45%,white);}
+#sheet[data-template="elegant"] .head-text .biz-name{font-family:Georgia,"Times New Roman",serif;font-size:27px;font-weight:700;letter-spacing:.01em;}
+#sheet[data-template="elegant"] .head-text .biz-line{font-family:Georgia,serif;font-size:11px;}
+#sheet[data-template="elegant"] .logo-circle{border:1px solid var(--invoice-accent);border-radius:0;}
+#sheet[data-template="elegant"] .invoice-band{margin:0 36px;padding:19px 10px;background:#fff!important;color:var(--invoice-accent);text-align:center;font:700 22px Georgia,"Times New Roman",serif;letter-spacing:.28em;border-top:1px solid var(--invoice-accent);border-bottom:1px solid var(--invoice-accent);}
+#sheet[data-template="elegant"] .details{font-family:Georgia,serif;}
+#sheet[data-template="elegant"] .dline .dlabel{font-family:Georgia,serif;letter-spacing:.06em;}
+#sheet[data-template="elegant"] .dline .dval{font-family:Georgia,serif;}
+#sheet[data-template="elegant"] table.items{border:1px solid color-mix(in srgb,var(--invoice-accent) 35%,white);border-radius:0;}
+#sheet[data-template="elegant"] table.items thead th{background:var(--invoice-accent);font-family:Georgia,serif;letter-spacing:.1em;}
+#sheet[data-template="elegant"] table.items tbody td{font-family:Georgia,serif;background:#fff!important;border-bottom:1px solid #eee8df;}
+#sheet[data-template="elegant"] .total-box .total-value{background:#fff;color:var(--invoice-accent);border:1px solid var(--invoice-accent);border-radius:0;font-family:Georgia,serif;}
+#sheet[data-template="elegant"] .sign-line{border-color:var(--invoice-accent);}
+
+@media(max-width:700px){#sheet .head{padding:22px 18px 18px;gap:10px}#sheet .details{padding:20px 18px 8px}#sheet .invoice-band{padding:13px 18px;font-size:17px}#sheet table.items{width:calc(100% - 36px);margin-left:18px;margin-right:18px}#sheet .total-wrap{margin-left:18px;margin-right:18px}#sheet .sign-row{padding:0 18px}}
+@media print{#sheet{box-shadow:none!important;outline-offset:-7px;print-color-adjust:exact;-webkit-print-color-adjust:exact}#sheet .invoice-band,#sheet table.items thead th,#sheet .total-box .total-value{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+
+/* Dashboard-only design preferences and logo watermark */
+.ni-dashboard-design{width:100%;max-width:none;margin:24px 0 28px;box-sizing:border-box}
+.ni-dashboard-design .ni-template-options{grid-template-columns:repeat(5,minmax(0,1fr))}
+#sheet .sheet-watermark{position:absolute;z-index:0;pointer-events:none;left:50%;top:53%;width:min(48%,320px);max-height:300px;object-fit:contain;transform:translate(-50%,-50%);opacity:.075;filter:grayscale(1);mix-blend-mode:multiply}
+#sheet>*:not(.sheet-watermark){position:relative;z-index:1}
+#sheet .sheet-watermark{z-index:0}
+#sheet[data-template="ledger"]{border:1px solid #cbd5e1;border-top:9px solid var(--invoice-accent);border-radius:2px;box-shadow:0 18px 40px rgba(15,23,42,.13)}
+#sheet[data-template="ledger"] .head{background:#f1f5f9;border-bottom:1px solid #cbd5e1;padding:34px 36px 25px}
+#sheet[data-template="ledger"] .head-text .biz-name{font-size:24px;letter-spacing:-.035em}
+#sheet[data-template="ledger"] .invoice-band{margin:0;padding:18px 36px;background:#172033!important;color:#fff;font-size:22px;letter-spacing:.16em}
+#sheet[data-template="ledger"] .details{padding-top:27px}
+#sheet[data-template="ledger"] table.items{border-radius:0;border:1px solid #cbd5e1}
+#sheet[data-template="ledger"] table.items thead th{background:#172033;color:#fff;border-right:1px solid #3b4658}
+#sheet[data-template="ledger"] table.items tbody tr:nth-child(even) td{background:#f1f5f9}
+#sheet[data-template="ledger"] .total-box .total-value{border-radius:2px;box-shadow:5px 5px 0 color-mix(in srgb,var(--invoice-accent) 20%,white)}
+#sheet[data-template="signature"]{border:1px solid #d6c7a0;border-radius:3px;box-shadow:0 20px 45px rgba(41,37,36,.13);font-family:Georgia,"Times New Roman",serif}
+#sheet[data-template="signature"]:after{content:"";position:absolute;inset:8px;border:1px solid color-mix(in srgb,var(--invoice-accent) 48%,white);pointer-events:none;z-index:2}
+#sheet[data-template="signature"] .head{padding:42px 42px 27px;background:linear-gradient(110deg,#fbf8f1,#fff 70%);border-bottom:1px solid #e7dcc4}
+#sheet[data-template="signature"] .head-text .biz-name{font:700 27px Georgia,"Times New Roman",serif;letter-spacing:.015em}
+#sheet[data-template="signature"] .head-text .biz-line{font-family:Georgia,serif;color:#6b6254}
+#sheet[data-template="signature"] .logo-circle{border:1px solid var(--invoice-accent);border-radius:50%;background:#fff}
+#sheet[data-template="signature"] .invoice-band{margin:0 38px;padding:19px 12px;background:transparent!important;color:var(--invoice-accent);border-top:1px solid var(--invoice-accent);border-bottom:1px solid var(--invoice-accent);text-align:center;font:700 21px Georgia,"Times New Roman",serif;letter-spacing:.28em}
+#sheet[data-template="signature"] .details{font-family:Georgia,serif;padding-top:28px}
+#sheet[data-template="signature"] .dline .dlabel,#sheet[data-template="signature"] .dline .dval{font-family:Georgia,serif}
+#sheet[data-template="signature"] table.items{border:1px solid #e7dcc4;border-radius:0}
+#sheet[data-template="signature"] table.items thead th{background:var(--invoice-accent);font-family:Georgia,serif;letter-spacing:.08em}
+#sheet[data-template="signature"] table.items tbody td{background:#fff!important;border-bottom:1px solid #eee8df;font-family:Georgia,serif}
+#sheet[data-template="signature"] .total-box .total-value{background:#fbf8f1;color:var(--invoice-accent);border:1px solid var(--invoice-accent);border-radius:0;font-family:Georgia,serif}
+#sheet[data-template="signature"] .sign-line{border-color:var(--invoice-accent)}
+.ni-template-mini[data-mini="ledger"]{border-top:5px solid #172033;border-radius:2px}
+.ni-template-mini[data-mini="ledger"] i{height:6px;background:#172033}
+.ni-template-mini[data-mini="signature"]{border:2px solid #b8860b;border-radius:0;background:#fbf8f1}
+.ni-template-mini[data-mini="signature"] i{height:3px;background:#b8860b}
+@media(max-width:700px){.ni-dashboard-design .ni-template-options{grid-template-columns:repeat(2,minmax(0,1fr))}}

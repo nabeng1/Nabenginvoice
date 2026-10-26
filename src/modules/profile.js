@@ -3,7 +3,7 @@ import "../runtime.js";
 function niSetLogoPreview(src){ const box=NI.$('profileLogoPreview'); if(!box)return; box.innerHTML=src?`<img src="${src}" alt="Business logo">`:'<span>LOGO</span>'; }
 function niSetSignaturePreview(src){ const box=NI.$('profileSignaturePreview'); if(!box)return; box.innerHTML=src?`<img src="${src}" alt="Digital signature">`:'<span>No signature</span>'; }
 function niApplySignatureToEditor(src){ const img=NI.$('pSignature'); const row=NI.$('digitalSignatureRow'); if(!img||!row)return; if(src){ img.src=src; row.style.display='flex'; } else { img.removeAttribute('src'); row.style.display='none'; } }
-function niApplyLogoToEditor(src){ if(!src)return; NI.state.niProfileLogoDataUrl=src; logoPreview.innerHTML=`<img src="${src}" alt="logo">`; pLogoCircle.innerHTML=`<img src="${src}" alt="logo">`; }
+function niApplyLogoToEditor(src){ if(!src)return; NI.state.niProfileLogoDataUrl=src; logoPreview.innerHTML=`<img src="${src}" alt="logo">`; pLogoCircle.innerHTML=`<img src="${src}" alt="logo">`; const sheet=document.getElementById('sheet'); if(sheet){let wm=sheet.querySelector('.sheet-watermark');if(!wm){wm=document.createElement('img');wm.className='sheet-watermark';wm.alt='';wm.setAttribute('aria-hidden','true');sheet.prepend(wm);}wm.src=src;} }
 async function niSaveProfile(){
   if(!NI.state.niSupabase||!NI.state.niSession)return;
   const btn=NI.$('saveProfileBtn'); if(btn){btn.disabled=true;btn.textContent='Saving…';}
