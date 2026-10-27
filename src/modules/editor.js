@@ -56,7 +56,7 @@ import "../runtime.js";
     const dashboard=document.getElementById('dashboardScreen');
     if(!dashboard||document.getElementById('niDesignControls'))return;
     const controls=document.createElement('section');
-    controls.id='niDesignControls'; controls.className='ni-design-controls ni-dashboard-design';
+    controls.id='niDesignControls'; controls.className='ni-design-controls ni-dashboard-design ni-hidden';
     controls.innerHTML=`
       <div class="ni-design-heading"><div><strong>Invoice appearance</strong><span>Set the default design for new invoices</span></div><span class="ni-design-tag">YOUR BRAND</span></div>
       <label class="ni-design-label">Choose a template</label>

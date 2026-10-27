@@ -16,9 +16,21 @@ function niWire(){
   onSubmit('authForm',NI.niAuthSubmit);
 
   onClick('dashLogout',NI.niSignOut);
+  const showDashboardSection=(id)=>{
+    NI.niSetPhase4Panel(id);
+    if(id==='invoiceHistoryPanel') NI.niLoadInvoiceHistory();
+    if(id==='customerPanel') NI.niLoadCustomers();
+    if(id==='analyticsPanel') NI.niLoadAnalytics();
+    if(id==='recurringPanel') NI.niOpenRecurring();
+    if(id==='expensesPanel') NI.niOpenExpenses();
+    if(id==='reportsPanel') NI.niOpenReports();
+  };
+  onClick('dashboardHomeBtn',()=>showDashboardSection('dashboardHome'));
+  onClick('invoiceTemplatesBtn',()=>showDashboardSection('niDesignControls'));
+  onClick('invoiceHistoryBtn',()=>showDashboardSection('invoiceHistoryPanel'));
+
   onClick('customersBtn',()=>{
-    NI.niSetPhase4Panel('customerPanel');
-    NI.niLoadCustomers();
+    showDashboardSection('customerPanel');
   });
   onClick('refreshCustomersBtn',NI.niLoadCustomers);
   onClick('saveCustomerBtn',NI.niSaveCustomer);
@@ -29,17 +41,14 @@ function niWire(){
   onChange('invoiceHistoryStatus',NI.niRenderInvoiceHistory);
 
   onClick('editorSignOut',NI.niSignOut);
-  onClick('newInvoiceBtn',()=>{NI.niNewInvoice();NI.niOpenEditor();});
-  onClick('dashboardInvoiceBtn',()=>{NI.niNewInvoice();NI.niOpenEditor();});
   onClick('backDashboardBtn',()=>{NI.niLoadInvoiceHistory();NI.niOpenDashboard();});
   onClick('refreshInvoicesBtn',NI.niLoadInvoiceHistory);
 
   onClick('editProfileBtn',()=>{
-    NI.niSetPhase4Panel('profilePanel');
+    showDashboardSection('profilePanel');
   });
   onClick('analyticsBtn',()=>{
-    NI.niSetPhase4Panel('analyticsPanel');
-    NI.niLoadAnalytics();
+    showDashboardSection('analyticsPanel');
   });
   onClick('refreshAnalyticsBtn',NI.niLoadAnalytics);
   onClick('recurringBtn',NI.niOpenRecurring);
@@ -130,10 +139,6 @@ function niWire(){
   });
   
   onClick("newInvoiceBtn", async () => {
-  const ok = await NI.niCheckAccessAndRoute();
-  if (!ok) return;
-});
-onClick("dashboardInvoiceBtn", async () => {
   const ok = await NI.niCheckAccessAndRoute();
   if (!ok) return;
   NI.niNewInvoice();

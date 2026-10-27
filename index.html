@@ -134,18 +134,21 @@
 
 
 <section class="ni-screen ni-dashboard ni-hidden" id="dashboardScreen">
-<nav class="ni-dash-nav"><div class="ni-logo"><img class="ni-brand-logo" data-ni-brand-logo src="/assets/nabeng-invoice-logo.png" alt="Nabeng Invoice logo"><span>Nabeng Invoice</span></div><div class="ni-user-chip"><span class="ni-avatar" id="dashAvatar">N</span><span id="dashUserName">User</span><button class="ni-btn ni-logout" id="dashLogout">Sign Out</button></div></nav>
+<nav class="ni-dash-nav"><div class="ni-logo"><img class="ni-brand-logo" data-ni-brand-logo src="/assets/nabeng-invoice-logo.png" alt="Nabeng Invoice logo"><span>Nabeng Invoice</span></div><div class="ni-user-chip"><span class="ni-avatar" id="dashAvatar" aria-label="User account"><i class="fas fa-user" aria-hidden="true"></i></span><span id="dashUserName">User</span><button class="ni-btn ni-logout" id="dashLogout">Sign Out</button></div></nav>
 <main class="ni-dash-main">
-<div class="ni-welcome"><div><h1 id="dashGreeting">Welcome back</h1><p>Your invoice workspace is ready.</p></div><button class="ni-btn ni-btn-primary" id="newInvoiceBtn">+ Create New Invoice</button></div>
-<div class="ni-dash-grid"><div class="ni-dash-card"><h3>Business</h3><div class="ni-big" id="dashBusinessName">Not set</div><p id="dashBusinessContact">Add your business profile so invoices can be prepared automatically.</p></div><div class="ni-dash-card"><h3>Account</h3><div class="ni-big" id="dashEmail">—</div><p>Signed-in account</p></div><div class="ni-dash-card"><h3>Invoice workspace</h3><div class="ni-big">Ready</div><p>Your existing invoice editor is protected behind your account.</p></div></div>
+<div id="dashboardHome"><div class="ni-welcome"><div><h1 id="dashGreeting">Welcome back</h1><p>Your invoice workspace is ready.</p></div><button class="ni-btn ni-btn-primary" id="newInvoiceBtn">+ Create New Invoice</button></div>
+<div class="ni-dash-grid"><div class="ni-dash-card"><h3>Business</h3><div class="ni-big" id="dashBusinessName">Not set</div><p id="dashBusinessContact">Add your business profile so invoices can be prepared automatically.</p></div><div class="ni-dash-card"><h3>Account</h3><div class="ni-big" id="dashEmail">—</div><p>Signed-in account</p></div><div class="ni-dash-card"><h3>Invoice workspace</h3><div class="ni-big">Ready</div><p>Your existing invoice editor is protected behind your account.</p></div></div></div>
 <div class="ni-actions">
-<button class="ni-action" id="editProfileBtn"><strong>Business Profile</strong><span>Save your business details and permanent logo used on invoices.</span></button>
-<button class="ni-action" id="customersBtn"><strong>Customers</strong><span>Save clients once and reuse their details on every invoice.</span></button>
-<button class="ni-action" id="dashboardInvoiceBtn"><strong>New Invoice</strong><span>Open the full invoice editor and create a new invoice.</span></button>
-<button class="ni-action" id="analyticsBtn"><strong>Revenue &amp; Analytics</strong><span>See sales, payments, outstanding balances and invoice activity.</span></button>
-<button class="ni-action" id="recurringBtn"><strong>Recurring Invoices</strong><span>Save invoice schedules and generate the next invoice when due.</span></button>
-<button class="ni-action" id="expensesBtn"><strong>Expenses</strong><span>Track business expenses and understand your real profit.</span></button>
-<button class="ni-action" id="reportsBtn"><strong>Business Reports</strong><span>Review revenue, expenses, profit and payment activity by date.</span></button>
+<button class="ni-action is-active" id="dashboardHomeBtn" data-dash-section="home"><i class="fas fa-house" aria-hidden="true"></i><strong>Home / Dashboard</strong></button>
+<button class="ni-action" id="invoiceTemplatesBtn" data-dash-section="templates"><i class="fas fa-palette" aria-hidden="true"></i><strong>Invoice Appearance</strong></button>
+<button class="ni-action" id="invoiceHistoryBtn" data-dash-section="history"><i class="fas fa-clock-rotate-left" aria-hidden="true"></i><strong>Invoice History</strong></button>
+<div class="ni-sidebar-divider" aria-hidden="true"></div>
+<button class="ni-action" id="editProfileBtn" data-dash-section="profile"><i class="fas fa-building" aria-hidden="true"></i><strong>Business Profile</strong></button>
+<button class="ni-action" id="customersBtn" data-dash-section="customers"><i class="fas fa-users" aria-hidden="true"></i><strong>Customers</strong></button>
+<button class="ni-action" id="analyticsBtn" data-dash-section="analytics"><i class="fas fa-chart-line" aria-hidden="true"></i><strong>Revenue &amp; Analytics</strong></button>
+<button class="ni-action" id="recurringBtn" data-dash-section="recurring"><i class="fas fa-calendar-alt" aria-hidden="true"></i><strong>Recurring Invoices</strong></button>
+<button class="ni-action" id="expensesBtn" data-dash-section="expenses"><i class="fas fa-wallet" aria-hidden="true"></i><strong>Expenses</strong></button>
+<button class="ni-action" id="reportsBtn" data-dash-section="reports"><i class="fas fa-chart-pie" aria-hidden="true"></i><strong>Business Reports</strong></button>
 </div>
 <div class="ni-dash-card ni-customers-card ni-hidden" id="customerPanel">
   <div class="ni-history-head"><div><h3>Customer Management</h3><p>Keep reusable customer names, contacts and addresses in one place.</p></div><button class="ni-small-btn" id="refreshCustomersBtn">Refresh</button></div>
@@ -217,7 +220,7 @@
   <div class="ni-analytics-grid"><div class="ni-metric"><span>Revenue</span><strong id="reportRevenue">Ghc 0.00</strong></div><div class="ni-metric"><span>Collected</span><strong id="reportCollected">Ghc 0.00</strong></div><div class="ni-metric"><span>Expenses</span><strong id="reportExpenses">Ghc 0.00</strong></div><div class="ni-metric"><span>Profit</span><strong id="reportProfit">Ghc 0.00</strong></div><div class="ni-metric"><span>Invoices</span><strong id="reportInvoiceCount">0</strong></div><div class="ni-metric"><span>Payments</span><strong id="reportPaymentCount">0</strong></div></div>
   <div class="ni-report-breakdown" id="reportBreakdown"></div>
 </div>
-<div class="ni-dash-card ni-history-card"><div class="ni-history-head"><div><h3>Invoice History</h3><p>Track invoices, payments, balances and due dates.</p></div><button class="ni-small-btn" id="refreshInvoicesBtn">Refresh</button></div>
+<div class="ni-dash-card ni-history-card ni-hidden" id="invoiceHistoryPanel"><div class="ni-history-head"><div><h3>Invoice History</h3><p>Track invoices, payments, balances and due dates.</p></div><button class="ni-small-btn" id="refreshInvoicesBtn">Refresh</button></div>
 <div class="ni-history-tools">
   <input id="invoiceHistorySearch" type="search" placeholder="Search invoice number or client...">
   <select id="invoiceHistoryStatus">

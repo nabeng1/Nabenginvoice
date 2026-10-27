@@ -9,7 +9,9 @@ function niDateAdd(dateStr,frequency){
   return d.toISOString().slice(0,10);
 }
 function niSetPhase4Panel(id){
-  ['recurringPanel','expensesPanel','reportsPanel','customerPanel','profilePanel','analyticsPanel'].forEach(x=>{const el=NI.$(x);if(el&&x!==id)el.classList.add('ni-hidden');});
+  const all=['dashboardHome','niDesignControls','invoiceHistoryPanel','recurringPanel','expensesPanel','reportsPanel','customerPanel','profilePanel','analyticsPanel'];
+  all.forEach(x=>{const el=NI.$(x);if(el)el.classList.toggle('ni-hidden',x!==id);});
+  document.querySelectorAll('#dashboardScreen [data-dash-section]').forEach(b=>b.classList.toggle('is-active',b.dataset.dashSection===({profilePanel:'profile',customerPanel:'customers',analyticsPanel:'analytics',recurringPanel:'recurring',expensesPanel:'expenses',reportsPanel:'reports',niDesignControls:'templates',invoiceHistoryPanel:'history',dashboardHome:'home'}[id]||id)));
   const target=NI.$(id);if(target)target.classList.remove('ni-hidden');
 }
 function niPopulateRecurringCustomerSelect(){

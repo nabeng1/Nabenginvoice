@@ -219,7 +219,7 @@ async function niLoadUser(user){
   NI.state.niSession=user;
   try{ NI.state.niProfile=await NI.niEnsureProfile(user); }catch(e){ console.error('Profile load failed',e); NI.state.niProfile={user_id:user.id,full_name:user.user_metadata?.full_name||'',business_name:'',business_email:user.email||'',business_phone:'',business_address:'',logo_url:'',signature_url:''}; }
   NI.$('dashUserName').textContent=NI.state.niProfile.full_name||user.email||'User';
-  NI.$('dashAvatar').textContent=NI.niInitial(NI.state.niProfile.full_name||user.email);
+  NI.$('dashAvatar').innerHTML='<i class="fas fa-user" aria-hidden="true"></i>';
   NI.$('dashGreeting').textContent='Welcome back, '+(NI.state.niProfile.full_name||user.email?.split('@')[0]||'there');
   NI.$('dashEmail').textContent=user.email||'—';
   NI.$('dashBusinessName').textContent=NI.state.niProfile.business_name||'Business profile not set';
