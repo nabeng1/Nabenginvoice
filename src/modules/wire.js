@@ -25,7 +25,9 @@ function niWire(){
     if(id==='expensesPanel') NI.niOpenExpenses();
     if(id==='reportsPanel') NI.niOpenReports();
   };
-  onClick('dashboardHomeBtn',()=>showDashboardSection('dashboardHome'));
+  onClick('dashboardHomeBtn',()=>{showDashboardSection('dashboardHome');NI.niLoadInvoiceHistory();});
+  onClick('homeViewAllInvoices',()=>showDashboardSection('invoiceHistoryPanel'));
+  onClick('homeEditProfile',()=>showDashboardSection('profilePanel'));
   onClick('invoiceTemplatesBtn',()=>showDashboardSection('niDesignControls'));
   onClick('invoiceHistoryBtn',()=>showDashboardSection('invoiceHistoryPanel'));
 

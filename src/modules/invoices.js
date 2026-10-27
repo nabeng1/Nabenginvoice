@@ -19,6 +19,23 @@ async function niLoadInvoiceHistory(){
   if(!data?.length){ list.innerHTML='<div class="ni-history-empty">No invoices yet. Create your first invoice and it will appear here.</div>'; return; }
   window.niInvoiceHistoryData=data.map(inv=>({...inv,status:NI.niCalculateStatus(inv.total,inv.amount_paid,inv.due_date,inv.status)}));
   NI.niRenderInvoiceHistory();
+  niRenderHomeRecentInvoices();
+}
+
+function niRenderHomeRecentInvoices(){
+  const list=NI.$('homeRecentInvoices'); if(!list)return;
+  const rows=(window.niInvoiceHistoryData||[]).slice(0,4);
+  if(!rows.length){list.innerHTML='<div class="ni-history-empty">No saved invoices yet. Create an invoice and it will appear here.</div>';return;}
+  list.innerHTML=rows.map(inv=>{
+    const status=inv.status||'unpaid';
+    return `<button type="button" class="ni-home-invoice-row" data-home-open-invoice="${NI.niEscape(inv.id)}">
+      <span class="ni-home-invoice-file"><i class="fas fa-file-invoice" aria-hidden="true"></i></span>
+      <span class="ni-home-invoice-main"><strong>${NI.niEscape(inv.invoice_number||'Untitled invoice')}</strong><small>${NI.niEscape(inv.client_name||'No client')} · ${NI.niEscape(inv.invoice_date||'No date')}</small></span>
+      <span class="ni-home-invoice-total"><strong>${NI.niEscape(inv.currency||'Ghc')} ${NI.niMoney(inv.total)}</strong><small class="ni-home-invoice-status status-${NI.niEscape(status)}">${NI.niEscape(status==='partial'?'Partially paid':status)}</small></span>
+      <i class="fas fa-chevron-right ni-home-invoice-chevron" aria-hidden="true"></i>
+    </button>`;
+  }).join('');
+  list.querySelectorAll('[data-home-open-invoice]').forEach(btn=>btn.onclick=()=>NI.niOpenSavedInvoice(btn.dataset.homeOpenInvoice));
 }
 
 function niRenderInvoiceHistory(){
@@ -111,6 +128,7 @@ Object.assign(NI, {
   niGenerateInvoiceNumber,
   niLoadInvoiceHistory,
   niRenderInvoiceHistory,
+  niRenderHomeRecentInvoices,
   niOpenSavedInvoice,
   niDeleteInvoice,
   niNewInvoice,
