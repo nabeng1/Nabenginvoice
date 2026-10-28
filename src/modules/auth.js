@@ -89,6 +89,7 @@ async function niEnsureProfile(user) {
     business_address: "",
     logo_url: "",
     signature_url: "",
+    avatar_url: "",
     trial_ends_at: trialEnds.toISOString(),
     subscription_status: "trial",
   };
@@ -217,24 +218,25 @@ async function niUpdatePassword(e) {
 
 async function niLoadUser(user){
   NI.state.niSession=user;
-  try{ NI.state.niProfile=await NI.niEnsureProfile(user); }catch(e){ console.error('Profile load failed',e); NI.state.niProfile={user_id:user.id,full_name:user.user_metadata?.full_name||'',business_name:'',business_email:user.email||'',business_phone:'',business_address:'',logo_url:'',signature_url:''}; }
+  try{ NI.state.niProfile=await NI.niEnsureProfile(user); }catch(e){ console.error('Profile load failed',e); NI.state.niProfile={user_id:user.id,full_name:user.user_metadata?.full_name||'',business_name:'',business_email:user.email||'',business_phone:'',business_address:'',logo_url:'',signature_url:'',avatar_url:''}; }
   const displayName=NI.state.niProfile.full_name||user.email||'User';
-  NI.$('dashUserName').textContent=displayName;
-  const homeName=NI.$('dashUserNameHome'); if(homeName) homeName.textContent=displayName;
-  NI.$('dashAvatar').innerHTML='<i class="fas fa-user" aria-hidden="true"></i>';
-  const homeAv=NI.$('dashAvatarHome'); if(homeAv) homeAv.innerHTML='<i class="fas fa-user"></i>';
+  NI.niSyncDisplayName?.(displayName);
   NI.$('dashGreeting').textContent='Welcome back, '+(NI.state.niProfile.full_name||user.email?.split('@')[0]||'there');
   NI.$('dashEmail').textContent=user.email||'—';
   NI.$('dashBusinessName').textContent=NI.state.niProfile.business_name||'Business profile not set';
   NI.$('dashBusinessContact').textContent=NI.state.niProfile.business_phone||NI.state.niProfile.business_email||'Add your business profile so invoices can be prepared automatically.';
+  const fullNameEl=NI.$('profileFullName'); if(fullNameEl) fullNameEl.value=NI.state.niProfile.full_name||'';
   NI.$('profileBusinessName').value=NI.state.niProfile.business_name||'';
   NI.$('profileBusinessEmail').value=NI.state.niProfile.business_email||user.email||'';
   NI.$('profileBusinessPhone').value=NI.state.niProfile.business_phone||'';
   NI.$('profileBusinessAddress').value=NI.state.niProfile.business_address||'';
   NI.state.niProfileLogoDataUrl=NI.state.niProfile.logo_url||'';
   NI.state.niProfileSignatureDataUrl=NI.state.niProfile.signature_url||'';
+  NI.state.niProfileAvatarDataUrl=NI.state.niProfile.avatar_url||'';
   NI.niSetLogoPreview(NI.state.niProfileLogoDataUrl);
   NI.niSetSignaturePreview(NI.state.niProfileSignatureDataUrl);
+  NI.niSetAvatarPreview?.(NI.state.niProfileAvatarDataUrl);
+  NI.niApplyAvatar?.(NI.state.niProfileAvatarDataUrl);
   NI.niApplySignatureToEditor(NI.state.niProfileSignatureDataUrl);
   
   // --- subscription gate ---

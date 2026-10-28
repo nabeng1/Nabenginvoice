@@ -259,6 +259,13 @@
 </div>
 
 <div class="ni-actions">
+<div class="ni-sidebar-user" id="sidebarUserBlock">
+  <div class="ni-sidebar-avatar" id="sidebarAvatar"><i class="fas fa-user" aria-hidden="true"></i></div>
+  <div class="ni-sidebar-user-meta">
+    <strong id="sidebarUserName">User</strong>
+    <small id="sidebarUserRole">Business Admin</small>
+  </div>
+</div>
 <button class="ni-action is-active" id="dashboardHomeBtn" data-dash-section="home"><i class="fas fa-house" aria-hidden="true"></i><strong>Home</strong></button>
 <button class="ni-action" id="invoiceTemplatesBtn" data-dash-section="templates"><i class="fas fa-palette" aria-hidden="true"></i><strong>Templates</strong></button>
 <button class="ni-action" id="invoiceHistoryBtn" data-dash-section="history"><i class="fas fa-clock-rotate-left" aria-hidden="true"></i><strong>Invoices</strong></button>
@@ -284,7 +291,15 @@
   <div class="ni-customer-search"><input id="customerSearch" type="search" placeholder="Search customers..."></div>
   <div class="ni-customer-list" id="customerList"><div class="ni-history-empty">Loading customers...</div></div>
 </div>
-<div class="ni-dash-card ni-profile ni-hidden" id="profilePanel"><h3>Business Profile</h3><p>Save your business details, logo, and digital signature. They will be reused automatically on your invoices.</p><div class="ni-profile-assets">
+<div class="ni-dash-card ni-profile ni-hidden" id="profilePanel"><h3>Business Profile</h3><p>Save your photo, business details, logo, and digital signature. Your photo appears on the dashboard and sidebar.</p>
+<div class="ni-profile-assets">
+<div class="ni-asset-card ni-avatar-card">
+<div class="ni-asset-head"><div><div class="ni-asset-title">Profile Picture</div><div class="ni-asset-help">Shown on the home bar and sidebar with your name. PNG or JPG, max 2MB.</div></div></div>
+<div class="ni-avatar-preview-wrap">
+  <div class="ni-avatar-preview" id="profileAvatarPreview"><i class="fas fa-user" aria-hidden="true"></i></div>
+</div>
+<div class="ni-upload-row"><label class="ni-upload-btn">Upload Photo<input accept="image/png,image/jpeg,image/jpg" hidden="" id="profileAvatarInput" type="file"/></label><button class="ni-remove-btn" id="removeAvatarBtn" type="button">Remove</button></div>
+</div>
 <div class="ni-asset-card">
 <div class="ni-asset-head"><div><div class="ni-asset-title">Business Logo</div><div class="ni-asset-help">Used on your invoices and saved to your profile.</div></div></div>
 <div class="ni-asset-preview" id="profileLogoPreview"><span>LOGO</span></div>
@@ -295,7 +310,16 @@
 <div class="ni-asset-preview signature" id="profileSignaturePreview"><span>No signature</span></div>
 <div class="ni-upload-row"><label class="ni-upload-btn">Upload Signature<input accept="image/png,image/jpeg,image/jpg" hidden="" id="profileSignatureInput" type="file"/></label><button class="ni-remove-btn" id="removeSignatureBtn" type="button">Remove</button></div>
 </div>
-</div><div class="ni-profile-grid"><div class="ni-field"><label>Business name</label><input id="profileBusinessName" placeholder="Your business name"/></div><div class="ni-field"><label>Business email</label><input id="profileBusinessEmail" placeholder="business@example.com" type="email"/></div><div class="ni-field"><label>Business phone</label><input id="profileBusinessPhone" placeholder="Phone number"/></div><div class="ni-field"><label>Business address</label><input id="profileBusinessAddress" placeholder="Business address"/></div></div><button class="ni-btn ni-btn-primary ni-profile-save" id="saveProfileBtn">Save Business Profile</button><div class="ni-msg" id="profileMsg"></div></div>
+</div>
+<div class="ni-profile-grid">
+<div class="ni-field"><label>Your full name</label><input id="profileFullName" placeholder="Your full name"/></div>
+<div class="ni-field"><label>Business name</label><input id="profileBusinessName" placeholder="Your business name"/></div>
+<div class="ni-field"><label>Business email</label><input id="profileBusinessEmail" placeholder="business@example.com" type="email"/></div>
+<div class="ni-field"><label>Business phone</label><input id="profileBusinessPhone" placeholder="Phone number"/></div>
+<div class="ni-field" style="grid-column:1/-1"><label>Business address</label><input id="profileBusinessAddress" placeholder="Business address"/></div>
+</div>
+<button class="ni-btn ni-btn-primary ni-profile-save" id="saveProfileBtn">Save Business Profile</button>
+<div class="ni-msg" id="profileMsg"></div></div>
 <div class="ni-dash-card ni-analytics-card ni-hidden" id="analyticsPanel">
   <div class="ni-history-head"><div><h3>Revenue &amp; Analytics</h3><p>Live totals calculated from your saved invoices and payment records.</p></div><button class="ni-small-btn" id="refreshAnalyticsBtn">Refresh</button></div>
   <div class="ni-analytics-grid">

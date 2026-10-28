@@ -78,6 +78,31 @@ function niWire(){
 
   onClick('saveProfileBtn',NI.niSaveProfile);
 
+  const avatarInput=NI.$('profileAvatarInput');
+  if(avatarInput)avatarInput.addEventListener('change',e=>{
+    const file=e.target.files?.[0];
+    if(!file)return;
+    if(!['image/png','image/jpeg','image/jpg'].includes(file.type)){
+      alert('Please upload a PNG or JPG photo.');
+      e.target.value='';
+      return;
+    }
+    if(file.size>2*1024*1024){
+      alert('Photo must be 2MB or smaller.');
+      e.target.value='';
+      return;
+    }
+    NI.state.niProfileAvatarFile=file;
+    NI.state.niRemoveAvatar=false;
+    const reader=new FileReader();
+    reader.onload=()=>{
+      NI.state.niProfileAvatarDataUrl=reader.result;
+      NI.niSetAvatarPreview(reader.result);
+      NI.niApplyAvatar(reader.result); // live preview on sidebar + home
+    };
+    reader.readAsDataURL(file);
+  });
+
   const logoInput=NI.$('profileLogoInput');
   if(logoInput)logoInput.addEventListener('change',e=>{
     const file=e.target.files?.[0];
@@ -127,6 +152,13 @@ function niWire(){
     reader.readAsDataURL(file);
   });
 
+  onClick('removeAvatarBtn',()=>{
+    NI.state.niProfileAvatarFile=null;
+    NI.state.niProfileAvatarDataUrl='';
+    NI.state.niRemoveAvatar=true;
+    NI.niSetAvatarPreview('');
+    NI.niApplyAvatar('');
+  });
   onClick('removeLogoBtn',()=>{
     NI.state.niProfileLogoFile=null;
     NI.state.niProfileLogoDataUrl='';
@@ -140,6 +172,7 @@ function niWire(){
     NI.niSetSignaturePreview('');
     NI.niApplySignatureToEditor('');
   });
+
   
   onClick("newInvoiceBtn", async () => {
   const ok = await NI.niCheckAccessAndRoute();
