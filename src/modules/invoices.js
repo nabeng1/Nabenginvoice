@@ -23,19 +23,126 @@ async function niLoadInvoiceHistory(){
 }
 
 function niRenderHomeRecentInvoices(){
-  const list=NI.$('homeRecentInvoices'); if(!list)return;
-  const rows=(window.niInvoiceHistoryData||[]).slice(0,4);
-  if(!rows.length){list.innerHTML='<div class="ni-history-empty">No saved invoices yet. Create an invoice and it will appear here.</div>';return;}
-  list.innerHTML=rows.map(inv=>{
-    const status=inv.status||'unpaid';
-    return `<button type="button" class="ni-home-invoice-row" data-home-open-invoice="${NI.niEscape(inv.id)}">
-      <span class="ni-home-invoice-file"><i class="fas fa-file-invoice" aria-hidden="true"></i></span>
-      <span class="ni-home-invoice-main"><strong>${NI.niEscape(inv.invoice_number||'Untitled invoice')}</strong><small>${NI.niEscape(inv.client_name||'No client')} · ${NI.niEscape(inv.invoice_date||'No date')}</small></span>
-      <span class="ni-home-invoice-total"><strong>${NI.niEscape(inv.currency||'Ghc')} ${NI.niMoney(inv.total)}</strong><small class="ni-home-invoice-status status-${NI.niEscape(status)}">${NI.niEscape(status==='partial'?'Partially paid':status)}</small></span>
-      <i class="fas fa-chevron-right ni-home-invoice-chevron" aria-hidden="true"></i>
-    </button>`;
+  const tbody=NI.$('homeRecentInvoices'); if(!tbody)return;
+  const data=window.niInvoiceHistoryData||[];
+  const rows=data.slice(0,5);
+  if(!rows.length){
+    tbody.innerHTML='<tr><td colspan="5" class="ni-table-empty">No saved invoices yet. Create an invoice and it will appear here.</td></tr>';
+    niUpdateHomeDashboard(data);
+    return;
+  }
+  tbody.innerHTML=rows.map(inv=>{
+    const status=(inv.status||'unpaid').toLowerCase();
+    const statusLabel=status==='partial'?'Partial':status.charAt(0).toUpperCase()+status.slice(1);
+    const dateStr=inv.invoice_date||inv.created_at||'—';
+    const prettyDate=String(dateStr).slice(0,10);
+    return `<tr data-home-open-invoice="${NI.niEscape(inv.id)}">
+      <td><strong>${NI.niEscape(inv.invoice_number||'—')}</strong></td>
+      <td>${NI.niEscape(prettyDate)}</td>
+      <td>${NI.niEscape(inv.client_name||'No client')}</td>
+      <td><strong>${NI.niEscape(inv.currency||'Ghc')} ${NI.niMoney(inv.total)}</strong></td>
+      <td><span class="ni-status-pill ${NI.niEscape(status)}">${NI.niEscape(statusLabel)}</span></td>
+    </tr>`;
   }).join('');
-  list.querySelectorAll('[data-home-open-invoice]').forEach(btn=>btn.onclick=()=>NI.niOpenSavedInvoice(btn.dataset.homeOpenInvoice));
+  tbody.querySelectorAll('[data-home-open-invoice]').forEach(row=>{
+    row.onclick=()=>NI.niOpenSavedInvoice(row.dataset.homeOpenInvoice);
+  });
+  niUpdateHomeDashboard(data);
+}
+
+function niUpdateHomeDashboard(data){
+  const invs=data||window.niInvoiceHistoryData||[];
+  const currency=(invs[0]&&invs[0].currency)||'Ghc';
+  const totalRev=invs.reduce((s,x)=>s+(Number(x.total)||0),0);
+  const paidCount=invs.filter(x=>{
+    const st=(x.status||'').toLowerCase();
+    return st==='paid'||(Number(x.amount_paid||0)>=Number(x.total||0)&&Number(x.total)>0);
+  }).length;
+  const clients=new Set(invs.map(x=>(x.client_name||'').trim().toLowerCase()).filter(Boolean)).size;
+  const paidRate=invs.length?Math.round((paidCount/invs.length)*100):0;
+
+  const set=(id,val)=>{const el=NI.$(id); if(el)el.textContent=val;};
+  set('kpiRevenue',currency+' '+NI.niMoney(totalRev));
+  set('kpiInvoices',String(invs.length));
+  set('kpiClients',String(clients));
+  set('kpiLoyalty',paidRate+'%');
+  set('kpiRevenueDelta',invs.length?`from ${invs.length} invoices`:'No data yet');
+  set('kpiInvoicesDelta',invs.length?'all time':'—');
+  set('kpiClientsDelta',clients?'unique':'—');
+  set('kpiLoyaltyDelta',invs.length?`${paidCount} paid`:'—');
+  ['kpiRevenueDelta','kpiInvoicesDelta','kpiClientsDelta','kpiLoyaltyDelta'].forEach(id=>{
+    const el=NI.$(id); if(el){ el.classList.remove('up','down'); el.classList.add(invs.length?'up':'neutral'); }
+  });
+
+  // Monthly revenue chart (last 9 months)
+  const chart=NI.$('monthlyRevenueChart');
+  if(chart){
+    const months=[];
+    const now=new Date();
+    for(let i=8;i>=0;i--){
+      const d=new Date(now.getFullYear(),now.getMonth()-i,1);
+      const key=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+      const label=d.toLocaleString('en',{month:'short'});
+      months.push({key,label,total:0});
+    }
+    invs.forEach(inv=>{
+      const raw=inv.invoice_date||inv.created_at||'';
+      if(!raw)return;
+      const d=new Date(raw);
+      if(isNaN(d))return;
+      const key=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+      const m=months.find(x=>x.key===key);
+      if(m)m.total+=Number(inv.total)||0;
+    });
+    const max=Math.max(...months.map(m=>m.total),1);
+    const peakIdx=months.reduce((best,m,i)=>m.total>months[best].total?i:best,0);
+    chart.innerHTML=months.map((m,i)=>{
+      const h=Math.max(8,Math.round((m.total/max)*140));
+      return `<div class="ni-bar-col">
+        <div class="ni-bar ${i===peakIdx&&m.total>0?'is-peak':''}" style="height:${h}px" title="${NI.niEscape(currency)} ${NI.niMoney(m.total)}"></div>
+        <span class="ni-bar-label">${NI.niEscape(m.label)}</span>
+      </div>`;
+    }).join('');
+    const yearTotal=months.reduce((s,m)=>s+m.total,0);
+    set('monthlyRevenueTotal',currency+' '+NI.niMoney(yearTotal));
+    set('monthlyRevenueBadge',now.getFullYear().toString());
+  }
+
+  // Activities from recent invoices
+  const act=NI.$('homeActivities');
+  if(act){
+    const recent=invs.slice(0,4);
+    if(!recent.length){
+      act.innerHTML='<li class="ni-activity-empty">Recent activity will appear here after you create invoices.</li>';
+    }else{
+      act.innerHTML=recent.map((inv,i)=>{
+        const status=(inv.status||'unpaid').toLowerCase();
+        const isPaid=status==='paid';
+        const cls=isPaid?'green':(status==='overdue'?'orange':'blue');
+        const icon=isPaid?'fa-check':'fa-file-invoice';
+        const title=isPaid
+          ? `Payment received for ${NI.niEscape(inv.invoice_number||'invoice')}`
+          : `${NI.niEscape(inv.client_name||'Client')} · ${NI.niEscape(inv.invoice_number||'New invoice')}`;
+        const desc=isPaid
+          ? `Invoice marked as paid`
+          : `Invoice created · ${NI.niEscape(inv.currency||'Ghc')} ${NI.niMoney(inv.total)}`;
+        const when=inv.created_at?String(inv.created_at).slice(0,16).replace('T',' '):(inv.invoice_date||'');
+        return `<li class="ni-activity-item">
+          <span class="ni-activity-dot ${cls}"><i class="fas ${icon}"></i></span>
+          <div class="ni-activity-body">
+            <strong>${title}</strong>
+            <span>${desc}</span>
+            <small>${NI.niEscape(when)}</small>
+          </div>
+        </li>`;
+      }).join('');
+    }
+  }
+
+  // Sync user pill
+  const nameEl=NI.$('dashUserName');
+  const homeName=NI.$('dashUserNameHome');
+  if(nameEl&&homeName)homeName.textContent=nameEl.textContent||'User';
 }
 
 function niRenderInvoiceHistory(){

@@ -28,6 +28,7 @@ function niWire(){
   onClick('dashboardHomeBtn',()=>{showDashboardSection('dashboardHome');NI.niLoadInvoiceHistory();});
   onClick('homeViewAllInvoices',()=>showDashboardSection('invoiceHistoryPanel'));
   onClick('homeEditProfile',()=>showDashboardSection('profilePanel'));
+  onClick('promoDownloadBtn',()=>showDashboardSection('niDesignControls'));
   onClick('invoiceTemplatesBtn',()=>showDashboardSection('niDesignControls'));
   onClick('invoiceHistoryBtn',()=>showDashboardSection('invoiceHistoryPanel'));
 
