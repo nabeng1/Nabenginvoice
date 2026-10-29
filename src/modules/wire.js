@@ -181,6 +181,53 @@ function niWire(){
   NI.niOpenEditor();
 });
 
+
+  // --- Mobile sidebar drawer ---
+  const menuBtn = NI.$('dashMenuBtn');
+  const backdrop = NI.$('sidebarBackdrop');
+  const dashScreen = NI.$('dashboardScreen');
+  function closeSidebar(){
+    if(dashScreen) dashScreen.classList.remove('ni-sidebar-open');
+  }
+  function openSidebar(){
+    if(dashScreen) dashScreen.classList.add('ni-sidebar-open');
+  }
+  if(menuBtn) menuBtn.addEventListener('click', ()=>{
+    if(dashScreen?.classList.contains('ni-sidebar-open')) closeSidebar();
+    else openSidebar();
+  });
+  if(backdrop) backdrop.addEventListener('click', closeSidebar);
+  // Close drawer when a nav action is chosen (mobile)
+  document.querySelectorAll('#dashboardScreen .ni-action').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      if(window.innerWidth <= 900) closeSidebar();
+    });
+  });
+
+  // --- Light / Dark theme ---
+  const themeBtn = NI.$('themeToggleBtn');
+  const themeIcon = NI.$('themeIcon');
+  function applyTheme(mode){
+    const m = mode === 'dark' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', m);
+    try{ localStorage.setItem('ni-theme', m); }catch(_){}
+    if(themeIcon){
+      themeIcon.className = m === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+    }
+  }
+  // Init from storage or system preference
+  (function initTheme(){
+    let saved = null;
+    try{ saved = localStorage.getItem('ni-theme'); }catch(_){}
+    if(saved === 'dark' || saved === 'light') applyTheme(saved);
+    else if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) applyTheme('dark');
+    else applyTheme('light');
+  })();
+  if(themeBtn) themeBtn.addEventListener('click', ()=>{
+    const cur = document.documentElement.getAttribute('data-theme') || 'light';
+    applyTheme(cur === 'dark' ? 'light' : 'dark');
+  });
+
 onClick('forgotPasswordLink', NI.niOpenForgotPassword);
 onClick('resetBackToSignIn', () => NI.niOpenAuth('signin'));
 onSubmit('resetPasswordForm', NI.niUpdatePassword);
