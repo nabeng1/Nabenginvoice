@@ -799,7 +799,7 @@ body{background:var(--ni-bg);color:var(--ni-text)}
    NABENG INVOICE — PHASE 3 BUSINESS TOOLS
 ========================================================= */
 .ni-analytics-card{margin-bottom:20px}.ni-analytics-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}.ni-metric{padding:18px;border:1px solid #e2e8f0;border-radius:16px;background:#f8fafc}.ni-metric span{display:block;color:#64748b;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}.ni-metric strong{display:block;margin-top:8px;font-size:20px;letter-spacing:-.02em}.ni-analytics-detail{margin-top:16px;border-top:1px solid #e5e7eb;padding-top:12px;display:grid;gap:7px}.ni-analytics-detail>div{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:10px;background:#f8fafc}.ni-analytics-detail span{color:#64748b}.ni-analytics-detail strong{color:#0f172a}
-.ni-editor-bottom-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:4px}.ni-secondary-btn{border:1px solid #cbd5e1;background:#fff;color:#0f172a;border-radius:10px;padding:12px 15px;font-weight:800;cursor:pointer;transition:.2s}.ni-secondary-btn:hover{border-color:#93c5fd;background:#eff6ff;color:#1d4ed8}.ni-preview-summary{margin:16px 0 0 auto;max-width:280px;border-top:1px solid #e5e7eb;padding-top:10px;display:grid;gap:6px}.ni-preview-summary>div{display:flex;justify-content:space-between;gap:18px;font-size:12px}.ni-preview-summary span{color:#64748b}.ni-preview-summary strong{color:#0f172a}
+.ni-editor-bottom-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:4px}.ni-save-invoice-btn{background:#ecfdf5;border-color:#a7f3d0;color:#047857}.ni-save-invoice-btn:hover{background:#d1fae5;border-color:#6ee7b7;color:#065f46}.ni-save-invoice-btn:disabled{opacity:.65;cursor:wait}.ni-secondary-btn{border:1px solid #cbd5e1;background:#fff;color:#0f172a;border-radius:10px;padding:12px 15px;font-weight:800;cursor:pointer;transition:.2s}.ni-secondary-btn:hover{border-color:#93c5fd;background:#eff6ff;color:#1d4ed8}.ni-preview-summary{margin:16px 0 0 auto;max-width:280px;border-top:1px solid #e5e7eb;padding-top:10px;display:grid;gap:6px}.ni-preview-summary>div{display:flex;justify-content:space-between;gap:18px;font-size:12px}.ni-preview-summary span{color:#64748b}.ni-preview-summary strong{color:#0f172a}
 .ni-modal{position:fixed;inset:0;z-index:100;background:rgba(15,23,42,.55);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;padding:18px}.ni-modal-card{width:min(620px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:22px;box-shadow:0 28px 80px rgba(15,23,42,.25);padding:24px}.ni-modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:18px}.ni-modal-head h3{margin:0;font-size:20px}.ni-modal-head p{margin:5px 0 0;color:#64748b;font-size:13px}.ni-modal-close{border:0;background:#f1f5f9;border-radius:10px;width:36px;height:36px;font-size:22px;line-height:1;cursor:pointer;color:#475569}.ni-modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.ni-modal-full{grid-column:1/-1}.ni-modal-grid input,.ni-modal-grid select,.ni-modal-grid textarea{width:100%;box-sizing:border-box;border:1px solid #dbe2ea;background:#fff;border-radius:12px;padding:11px 13px;font:inherit;outline:none}.ni-modal-grid input:focus,.ni-modal-grid select:focus,.ni-modal-grid textarea:focus{border-color:#60a5fa;box-shadow:0 0 0 3px rgba(59,130,246,.1)}.ni-modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:20px}.ni-receipt-modal{width:min(700px,100%)}.ni-receipt{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:28px;max-width:560px;margin:0 auto}.ni-receipt-brand{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;border-bottom:2px solid #0f172a;padding-bottom:18px}.ni-receipt-brand strong{font-size:21px;letter-spacing:-.03em}.ni-receipt-brand span{font-size:11px;font-weight:900;letter-spacing:.12em;color:#2563eb}.ni-receipt-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}.ni-receipt-meta small{display:block;color:#64748b;font-size:10px;text-transform:uppercase;letter-spacing:.06em}.ni-receipt-meta strong{display:block;margin-top:5px;font-size:12px}.ni-receipt-amount{padding:20px;border-radius:14px;background:#eff6ff;display:flex;justify-content:space-between;align-items:center;gap:15px}.ni-receipt-amount span{font-weight:700;color:#475569}.ni-receipt-amount strong{font-size:22px;color:#1d4ed8}.ni-receipt-lines{margin-top:18px;border-top:1px solid #e2e8f0}.ni-receipt-lines>div{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #eef2f7;font-size:13px}.ni-receipt-lines span{color:#64748b}.ni-receipt-note{text-align:center;color:#64748b;font-size:12px;margin:22px 0 0}
 @media(max-width:760px){.ni-analytics-grid{grid-template-columns:1fr 1fr}.ni-modal-grid{grid-template-columns:1fr}.ni-modal-full{grid-column:auto}.ni-receipt-meta{grid-template-columns:1fr}.ni-receipt-amount{align-items:flex-start;flex-direction:column}}
 @media(max-width:500px){.ni-analytics-grid{grid-template-columns:1fr}.ni-editor-bottom-actions>*{flex:1}.ni-receipt{padding:18px}}
@@ -1944,3 +1944,45 @@ body{background:var(--ni-bg);color:var(--ni-text)}
 [data-theme="dark"] .ni-activity-dot.green{ background:#064e3b; color:#34d399; }
 [data-theme="dark"] .ni-activity-dot.orange{ background:#431407; color:#fb923c; }
 [data-theme="dark"] .ni-activity-dot.blue{ background:#1e3a8a; color:#93c5fd; }
+
+/* Larger, clearer business identity on invoice previews and exported PDFs */
+#sheet .head{
+  grid-template-columns:94px minmax(0,1fr) 94px;
+  gap:18px;
+}
+#sheet .logo-circle{
+  width:88px;
+  height:88px;
+  border-radius:14px;
+}
+#sheet .logo-circle span{font-size:12px;}
+#sheet .head-text .biz-name{
+  font-size:31px !important;
+  line-height:1.16;
+  margin-bottom:8px;
+}
+#sheet .head-text .biz-line{
+  font-size:14px !important;
+  line-height:1.55;
+  margin:4px 0;
+  font-weight:600;
+}
+#sheet .sheet-watermark{
+  width:min(64%,440px);
+  max-height:420px;
+  opacity:.10;
+}
+@media(max-width:700px){
+  #sheet .head{
+    grid-template-columns:68px minmax(0,1fr) 0;
+    gap:10px;
+    padding:22px 16px 18px;
+  }
+  #sheet .logo-circle{width:64px;height:64px;border-radius:11px;}
+  #sheet .head-text .biz-name{font-size:23px !important;line-height:1.15;}
+  #sheet .head-text .biz-line{font-size:12px !important;line-height:1.45;}
+  #sheet .sheet-watermark{width:min(76%,340px);max-height:320px;}
+}
+@media print{
+  #sheet .sheet-watermark{opacity:.10 !important;}
+}

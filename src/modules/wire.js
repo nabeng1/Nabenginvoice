@@ -46,6 +46,22 @@ function niWire(){
   onClick('editorSignOut',NI.niSignOut);
   onClick('backDashboardBtn',()=>{NI.niLoadInvoiceHistory();NI.niOpenDashboard();});
   onClick('refreshInvoicesBtn',NI.niLoadInvoiceHistory);
+  onClick('saveInvoiceBtn',async()=>{
+    const button=NI.$('saveInvoiceBtn');
+    if(!NI.state.niSupabase||!NI.state.niSession){alert('Please sign in before saving an invoice.');return;}
+    const originalText=button?.innerHTML||'Save Invoice';
+    if(button){button.disabled=true;button.innerHTML='<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Saving...';}
+    try{
+      const saved=await NI.niSaveInvoiceRecord();
+      if(!saved)throw new Error('The invoice could not be saved. Please sign in and try again.');
+      if(button)button.innerHTML='<i class="fas fa-check" aria-hidden="true"></i> Saved';
+      setTimeout(()=>{if(button){button.innerHTML=originalText;button.disabled=false;}},1400);
+    }catch(error){
+      console.error('Invoice save failed:',error);
+      alert('Unable to save invoice: '+(error.message||'Please try again.'));
+      if(button){button.innerHTML=originalText;button.disabled=false;}
+    }
+  });
 
   onClick('editProfileBtn',()=>{
     showDashboardSection('profilePanel');
