@@ -78,7 +78,7 @@ async function niEnsureProfile(user) {
   if (data) return data;
 
   const trialEnds = new Date();
-  trialEnds.setDate(trialEnds.getDate() + 30);
+  trialEnds.setDate(trialEnds.getDate() + 14);
 
   const fallback = {
     user_id: user.id,

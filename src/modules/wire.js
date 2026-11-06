@@ -252,6 +252,11 @@ onClick("payMonthlyBtn", () => NI.niStartPaystackPayment("monthly"));
 onClick("payYearlyBtn",  () => NI.niStartPaystackPayment("yearly"));
 onClick("subLockSignOut", NI.niSignOut);
 
+// Subscribe early (during free trial)
+onClick("trialSubscribeBtn", () => NI.niStartPaystackPayment("monthly"));
+onClick("profilePayMonthlyBtn", () => NI.niStartPaystackPayment("monthly"));
+onClick("profilePayYearlyBtn", () => NI.niStartPaystackPayment("yearly"));
+
 // About & Contact navigation
 onClick('navAbout', () => NI.niOpenAbout());
 onClick('navContact', () => NI.niOpenContact());

@@ -1434,6 +1434,41 @@ body{background:var(--ni-bg);color:var(--ni-text)}
 .ni-home-user-pill strong{ display:block; font:700 12px Inter,sans-serif; color:#0f172a; line-height:1.2; }
 .ni-home-user-pill small{ display:block; font:500 10px Inter,sans-serif; color:#94a3b8; }
 
+/* Trial banner — subscribe early */
+.ni-trial-banner{
+  display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  background:linear-gradient(135deg,#eff6ff,#eef2ff);
+  border:1px solid #bfdbfe; border-radius:16px;
+  padding:14px 18px;
+  box-shadow:0 4px 14px rgba(37,99,235,.08);
+}
+.ni-trial-banner.ni-hidden{ display:none !important; }
+.ni-trial-banner-text{ display:flex; flex-direction:column; gap:2px; }
+.ni-trial-banner-text strong{ font:700 14px Inter,sans-serif; color:#1e40af; }
+.ni-trial-banner-text span{ font:500 12px Inter,sans-serif; color:#3b82f6; }
+[data-theme="dark"] .ni-trial-banner{
+  background:linear-gradient(135deg,#1e3a5f,#1e293b);
+  border-color:#1e40af;
+}
+[data-theme="dark"] .ni-trial-banner-text strong{ color:#93c5fd; }
+[data-theme="dark"] .ni-trial-banner-text span{ color:#60a5fa; }
+
+/* Profile subscription card */
+.ni-subscription-card{
+  margin-top:28px; padding:20px; border-radius:16px;
+  background:#f8fafc; border:1px solid #e2e8f0;
+}
+.ni-subscription-card h4{ margin:0 0 6px; font:700 15px Inter,sans-serif; color:#0f172a; }
+.ni-subscription-card p{ margin:0 0 12px; font:500 13px Inter,sans-serif; color:#475569; }
+.ni-subscription-actions{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:10px; }
+.ni-subscription-actions.ni-hidden{ display:none !important; }
+.ni-subscription-hint{ font-size:12px !important; color:#64748b !important; margin:0 !important; }
+[data-theme="dark"] .ni-subscription-card{
+  background:#1e293b; border-color:#334155;
+}
+[data-theme="dark"] .ni-subscription-card h4{ color:#f1f5f9; }
+[data-theme="dark"] .ni-subscription-card p{ color:#94a3b8; }
+
 /* KPI cards */
 .ni-kpi-row{
   display:grid; grid-template-columns:repeat(4,1fr); gap:16px;

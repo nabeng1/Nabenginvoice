@@ -34,9 +34,7 @@
   <div class="ni-nav-actions">
     <button class="ni-btn ni-btn-outline" id="landingSignIn">Sign In</button>
     <button class="ni-btn ni-btn-primary" id="landingSignUp">Create Account</button>
-	<button class="ni-btn ni-btn-primary" onclick="window.location.href='income.html'">
-    Splitter
-</button>
+	<button class="ni-btn ni-btn-primary" href ="income.html"><a href="income.html">Splitter</a></button>
   </div>
 </nav>
 <div class="ni-hero">
@@ -179,6 +177,14 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="ni-trial-banner ni-hidden" id="trialBanner">
+    <div class="ni-trial-banner-text">
+      <strong id="trialBannerTitle">Free trial active</strong>
+      <span id="trialBannerDays">14 days remaining</span>
+    </div>
+    <button type="button" class="ni-btn ni-btn-primary" id="trialSubscribeBtn">Subscribe now</button>
   </div>
 
   <div class="ni-kpi-row">
@@ -345,7 +351,18 @@
 <div class="ni-field" style="grid-column:1/-1"><label>Business address</label><input id="profileBusinessAddress" placeholder="Business address"/></div>
 </div>
 <button class="ni-btn ni-btn-primary ni-profile-save" id="saveProfileBtn">Save Business Profile</button>
-<div class="ni-msg" id="profileMsg"></div></div>
+<div class="ni-msg" id="profileMsg"></div>
+
+<div class="ni-subscription-card" id="profileSubscriptionCard">
+  <h4>Subscription</h4>
+  <p id="profileSubStatus">Loading subscription status…</p>
+  <div class="ni-subscription-actions ni-hidden" id="profileSubActions">
+    <button class="ni-btn ni-btn-primary" id="profilePayMonthlyBtn" type="button">Monthly — GHS 30</button>
+    <button class="ni-btn ni-btn-outline" id="profilePayYearlyBtn" type="button">Yearly — GHS 310</button>
+  </div>
+  <p class="ni-subscription-hint" id="profileSubHint">You can subscribe at any time during your free trial — no need to wait until it ends.</p>
+</div>
+</div>
 <div class="ni-dash-card ni-analytics-card ni-hidden" id="analyticsPanel">
   <div class="ni-history-head"><div><h3>Revenue &amp; Analytics</h3><p>Live totals calculated from your saved invoices and payment records.</p></div><button class="ni-small-btn" id="refreshAnalyticsBtn">Refresh</button></div>
   <div class="ni-analytics-grid">
@@ -641,7 +658,7 @@
           <span>Nabeng Invoice</span>
         </div>
         <h3>Subscription required</h3>
-        <p class="sub" id="subLockStatus">Your free 1-month trial has ended.</p>
+        <p class="sub" id="subLockStatus">Your free 14-day trial has ended.</p>
 
         <div style="display:grid;gap:12px;margin:24px 0">
           <button class="ni-btn ni-btn-primary" id="payMonthlyBtn" type="button">

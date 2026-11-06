@@ -1,7 +1,21 @@
 import "../runtime.js";
 
-const MONTHLY_AMOUNT_PESEWAS = 3000;   // GHS 30.00
-const YEARLY_AMOUNT_PESEWAS  = 31000;  // GHS 310.00
+// Prices shown on the form (what the customer sees)
+const MONTHLY_DISPLAY_GHS = 30;
+const YEARLY_DISPLAY_GHS  = 310;
+
+// Paystack Ghana local fee ~1.95%. We charge a bit more so after the fee
+// you still receive about the display price. The extra is NOT shown on the form.
+const PAYSTACK_FEE_RATE = 0.0195;
+
+function niAmountWithFeePesewas(displayGhs) {
+  // Charge enough so net ≈ displayGhs after 1.95% fee (round up to next pesewa)
+  const gross = displayGhs / (1 - PAYSTACK_FEE_RATE);
+  return Math.ceil(gross * 100); // pesewas
+}
+
+const MONTHLY_AMOUNT_PESEWAS = niAmountWithFeePesewas(MONTHLY_DISPLAY_GHS); // ~GHS 30.60
+const YEARLY_AMOUNT_PESEWAS  = niAmountWithFeePesewas(YEARLY_DISPLAY_GHS);  // ~GHS 316.17
 const PAYSTACK_PUBLIC_KEY    = "pk_live_d840cd5de76b748752770285dbdb00e940554827"; // ← replace with your key
 
 function niGeneratePaymentRef() {
@@ -83,12 +97,69 @@ function niHideLockedScreen() {
   NI.niHide("subscriptionLockedScreen");
 }
 
+function niDaysRemaining(endsAt) {
+  if (!endsAt) return 0;
+  const ms = new Date(endsAt).getTime() - Date.now();
+  return Math.max(0, Math.ceil(ms / (1000 * 60 * 60 * 24)));
+}
+
+function niUpdateTrialBanner(access) {
+  const banner = NI.$("trialBanner");
+  const titleEl = NI.$("trialBannerTitle");
+  const daysEl = NI.$("trialBannerDays");
+  const statusEl = NI.$("profileSubStatus");
+  const actionsEl = NI.$("profileSubActions");
+  const hintEl = NI.$("profileSubHint");
+
+  if (!access || !access.allowed) {
+    if (banner) banner.classList.add("ni-hidden");
+    return;
+  }
+
+  if (access.status === "trial") {
+    const days = NI.niDaysRemaining(access.endsAt);
+    if (banner) {
+      banner.classList.remove("ni-hidden");
+      if (titleEl) titleEl.textContent = "Free trial active";
+      if (daysEl) {
+        daysEl.textContent =
+          days === 1 ? "1 day remaining" : `${days} days remaining`;
+      }
+    }
+    if (statusEl) {
+      statusEl.textContent =
+        days === 1
+          ? "Your free 14-day trial ends tomorrow."
+          : `Your free 14-day trial has ${days} days remaining.`;
+    }
+    if (actionsEl) actionsEl.classList.remove("ni-hidden");
+    if (hintEl) {
+      hintEl.textContent =
+        "You can subscribe at any time during your free trial — no need to wait until it ends.";
+    }
+  } else if (access.status === "active") {
+    if (banner) banner.classList.add("ni-hidden");
+    const plan = access.plan === "yearly" ? "Yearly" : "Monthly";
+    const ends = access.endsAt
+      ? new Date(access.endsAt).toLocaleDateString()
+      : "—";
+    if (statusEl) {
+      statusEl.textContent = `${plan} plan active · renews / ends ${ends}`;
+    }
+    if (actionsEl) actionsEl.classList.add("ni-hidden");
+    if (hintEl) hintEl.textContent = "Thank you for subscribing.";
+  } else {
+    if (banner) banner.classList.add("ni-hidden");
+  }
+}
+
 async function niCheckAccessAndRoute() {
   await NI.niRefreshSubscription();
   const access = NI.niSubscriptionAllowed(NI.state.niProfile);
 
   if (access.allowed) {
     NI.niHideLockedScreen();
+    NI.niUpdateTrialBanner(access);
     // continue normal flow – caller will open dashboard
     return true;
   }
@@ -181,6 +252,8 @@ Object.assign(NI, {
   niRefreshSubscription,
   niShowLockedScreen,
   niHideLockedScreen,
+  niDaysRemaining,
+  niUpdateTrialBanner,
   niCheckAccessAndRoute,
   niLoadPaystackScript,
   niStartPaystackPayment,
